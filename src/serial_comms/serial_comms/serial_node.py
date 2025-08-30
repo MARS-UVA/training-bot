@@ -18,7 +18,7 @@ class SerialNode(Node):
         super().__init__('serial_node')
         self.subscription = self.create_subscription(
             msg_type=MotorCurrents,
-            topic='teleop',
+            topic='motor_currents',
             callback=self.listener_callback,
             qos_profile=QoSProfile(history=QoSHistoryPolicy.KEEP_LAST, depth= 1, reliability=QoSReliabilityPolicy.RELIABLE)) #1 queued message
         # FEEDBACK COMMENTED OUT FOR NOW
