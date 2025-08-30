@@ -42,10 +42,10 @@ public:
         // Get wheel speeds based on linear and angular components (currently using arcade drive)
         auto convertToCurrent = [](float speed) -> Uint8 {
           float scaled_speed = ((speed + 1.0f) / 2.0f) * 254.0f;
-          if(scaled_speed < 0) scaled = 0;
-          else if(scaled_speed > 254) scaled = 254;
+          if(scaled_speed < 0) scaled_speed = 0;
+          else if(scaled_speed > 254) scaled_speed = 254;
           return static_cast<Uint8>(scaled_speed);
-        }
+        };
         Uint8 left_wheels_speed = convertToCurrent(linear_component - angular_component);
         Uint8 right_wheels_speed = convertToCurrent(linear_component + angular_component);
         // Send wheel speeds to serial node
