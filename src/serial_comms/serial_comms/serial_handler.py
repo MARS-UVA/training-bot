@@ -10,7 +10,7 @@ START = 255 # start byte preceding every message
 class SerialHandler:
 	def __init__(self):
 		try:
-			self.SER = serial.Serial("/dev/ttyUSB0", 115200, timeout = None)
+			self.SER = serial.Serial("/dev/ttyACM0", 115200, timeout = None)
 		except serial.SerialException as e:
 			print(f"Error: Could not open or close serial port: {e}")
 
@@ -34,7 +34,7 @@ class SerialHandler:
 		self.SER.write(header.to_bytes(self.bytesPerMotor, byteorder="big"))
 		# logger.warn(f"Wrate {data}")
 		self.SER.write(bytes(data)) # write the data to serial port
-		logger.warn(f"Wrote {data} to Nucleo")
+		logger.info(f"Wrote {data} to microcontroller")
 
     # COMMENTED OUT READING MESSAGES AT LEAST FOR TIME BEING
 	# def readMsg(self, logger=None):
