@@ -50,10 +50,8 @@ public:
         Uint8 right_wheels_speed = convertToCurrent(linear_component + angular_component);
         // Send wheel speeds to serial node
         auto message = serial_msgs::msg::MotorCurrents();
-        message.front_left = left_wheels_speed;
-        message.front_right = right_wheels_speed;
-        message.back_left = left_wheels_speed;
-        message.back_right = right_wheels_speed;
+        message.left_wheels = left_wheels_speed;
+        message.right_wheels = right_wheels_speed;
         this->publisher_->publish(message);
       };
     timer_ = this->create_wall_timer(10ms, timer_callback);

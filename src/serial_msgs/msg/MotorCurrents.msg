@@ -1,4 +1,2 @@
-uint8 front_left #amps
-uint8 front_right
-uint8 back_left
-uint8 back_right
+uint8 left_wheels
+uint8 right_wheels

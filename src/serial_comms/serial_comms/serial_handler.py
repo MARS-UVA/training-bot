@@ -14,7 +14,7 @@ class SerialHandler:
 		except serial.SerialException as e:
 			print(f"Error: Could not open or close serial port: {e}")
 
-		self.numMotors = 4
+		self.numMotors = 2
 		self.bytesPerMotor = 1
 		self.totalDataBytes = self.numMotors * self.bytesPerMotor
 
@@ -30,8 +30,8 @@ class SerialHandler:
 		# print("sending")
 		mnum = (1<<8*self.bytesPerMotor)-1 #make sure each send is within maxbyte
 		# assert 0 <= header <= mnum
-		self.SER.write(bytes([START]))
-		self.SER.write(header.to_bytes(self.bytesPerMotor, byteorder="big"))
+		# self.SER.write(bytes([START]))
+		# self.SER.write(header.to_bytes(self.bytesPerMotor, byteorder="big"))
 		# logger.warn(f"Wrate {data}")
 		self.SER.write(bytes(data)) # write the data to serial port
 		logger.info(f"Wrote {data} to microcontroller")
@@ -50,9 +50,9 @@ class SerialHandler:
 if __name__ == "__main__":
 	import sys
 	header = 0 # 0 for motor commands
-	totalDataBytes = 4
+	totalDataBytes = 2
 	data = [ord('A') for i in range(totalDataBytes)] # populate a list with A's as default values
-	for i in range(1, min(len(sys.argv), 5)): # populate data with (up to 4) args passed into command line
+	for i in range(1, min(len(sys.argv), 3)): # populate data with (up to 2) args passed into command line
 		data[i-1] = int(sys.argv[i])
 	print(f"Data {data}")
 	handler = SerialHandler()

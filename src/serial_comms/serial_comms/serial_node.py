@@ -14,7 +14,7 @@ MOTOR_STILL = 127
 class SerialNode(Node):
 
     def __init__(self):
-        self.data = [MOTOR_STILL]*4 # [0:3]:4 wheels
+        self.data = [MOTOR_STILL]*2 # [0:1]:2 wheels
         super().__init__('serial_node')
         self.subscription = self.create_subscription(
             msg_type=MotorCurrents,
@@ -34,10 +34,8 @@ class SerialNode(Node):
     def listener_callback(self, msg):
         # self.get_logger().warn("Received motor query")
         # motors = ["FL", "FR", "BL", "BR"]
-        self.data[0] = msg.front_left
-        self.data[1] = msg.front_right
-        self.data[2] = msg.back_left
-        self.data[3] = msg.back_right   
+        self.data[0] = msg.left_wheels
+        self.data[1] = msg.right_wheels 
 
     def sendCurrents(self):
         #print(ok)
