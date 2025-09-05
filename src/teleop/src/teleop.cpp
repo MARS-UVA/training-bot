@@ -34,7 +34,7 @@ public:
         if(!controller_) return;
 
         float x_axis = SDL_GameControllerGetAxis(controller_, SDL_CONTROLLER_AXIS_LEFTX) / 32767.0f;
-        float y_axis = SDL_GameControllerGetAxis(controller_, SDL_CONTROLLER_AXIS_LEFTY) / 32767.0f;
+        float y_axis = -1 * SDL_GameControllerGetAxis(controller_, SDL_CONTROLLER_AXIS_LEFTY) / 32767.0f;
         RCLCPP_INFO(this->get_logger(), "x: %f, y: %f", x_axis, y_axis);
         // Get linear and angular component of robot based on max speed
         float linear_component = y_axis * FULL_FORWARD_MAGNITUDE;
