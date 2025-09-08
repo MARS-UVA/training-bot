@@ -2,12 +2,6 @@
 Carlos Giron
 */
 
-/* NOTES:
-* PINS 0 AND 1 ARE RESERVED FOR UART COMMS WITH R_PI!!!!!
-* coding conventions? snake_case for funcs or pascal? need ricP
-* freeRTOS for reading input stream in a seperate thread? Can't simulate here
-*/
-
 // ---------------------
 // Preprocessor
 // ---------------------
