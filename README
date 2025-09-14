@@ -1,4 +1,17 @@
 This repository is for the training bots
 
 command to build docker image:
-```docker build --platform=linux/arm64/v8 -t image_name:tag .```
+```
+docker build --platform=linux/arm64/v8 -t image_name:tag .
+```
+
+docker save -o training-bot.tar training-bot-base:pi-1.0
+
+scp training-bot.tar mars@larry.local:~/Downloads
+
+
+ON PI
+docker load -i ~/Downloads/training-bot.tar
+
+to run
+docker run -it --rm --device=/dev/input/event4 --device=/dev/ttyACM0 training-bot-base:pi-1.0
