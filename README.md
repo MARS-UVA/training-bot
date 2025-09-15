@@ -34,25 +34,3 @@ This repository is for the training bots
     * This step should be done connected over wifi, not wired
 
 connect via wifi for this step, not wired
-
-
-
-command to build docker image:
-```
-docker build --platform=linux/arm64/v8 -t image_name:tag .
-```
-
-docker save -o filename.tar image_name:tag
-
-scp filename.tar mars@larry.local:~/Downloads
-
-
-
-ssh mars@larry.local
-
-ON PI
-docker load -i ~/Downloads/filename.tar
-
-to run
-docker run -it --rm --device=/dev/input/event4 --device=/dev/ttyACM0 image_name:tag
-                                                                     training-bot-base:pi-1.0
