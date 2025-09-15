@@ -30,9 +30,11 @@ This repository is for the training bots
 1. Navigate to directory with the Dockerfile in it and make sure it's updated
 
 2. run `docker build -t image-name:tag .` where image-name:tag is the name of your docker image
+
 2a. if you need internet for building, follow setup for wired connection
 
 3. run `docker run -it --privileged image-name:tag` to start the container
+
 connect via wifi for this step, not wired
 
 
