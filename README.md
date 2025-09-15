@@ -17,6 +17,7 @@ This repository is for the training bots
 
 
 
+
 command to build docker image:
 ```
 docker build --platform=linux/arm64/v8 -t image_name:tag .
