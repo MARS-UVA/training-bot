@@ -5,13 +5,17 @@ command to build docker image:
 docker build --platform=linux/arm64/v8 -t image_name:tag .
 ```
 
-docker save -o training-bot.tar training-bot-base:pi-1.0
+docker save -o filename.tar image_name:tag
 
-scp training-bot.tar mars@larry.local:~/Downloads
+scp filename.tar mars@larry.local:~/Downloads
 
+
+
+ssh mars@larry.local
 
 ON PI
-docker load -i ~/Downloads/training-bot.tar
+docker load -i ~/Downloads/filename.tar
 
 to run
-docker run -it --rm --device=/dev/input/event4 --device=/dev/ttyACM0 training-bot-base:pi-1.0
+docker run -it --rm --device=/dev/input/event4 --device=/dev/ttyACM0 image_name:tag
+                                                                     training-bot-base:pi-1.0
