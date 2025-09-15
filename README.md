@@ -15,13 +15,25 @@ This repository is for the training bots
 6. Right click on the port, and select update driver> browse my computer for drivers> Select the driver folder you downloaded in step 1
 
 
-# Connecting pi to internet
+# Pulling code
 1. Plug pi into your laptop via usb-c
 
 2. ssh into the pi
 `ssh mars@hostname.local` where hostname is the label on the pi's ethernet port
 
 3. `sudo nmcli conn up eduroam`
+
+4. Navigate to the directory you want to update and `git pull`
+
+
+# Building image
+1. Navigate to directory with the Dockerfile in it and make sure it's updated
+
+2. run `docker build -t image-name:tag .` where image-name:tag is the name of your docker image
+2a. if you need internet for building, follow setup for wired connection
+
+3. run `docker run -it --privileged image-name:tag` to start the container
+connect via wifi for this step, not wired
 
 
 
