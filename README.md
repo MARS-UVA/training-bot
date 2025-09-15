@@ -15,6 +15,13 @@ This repository is for the training bots
 6. Right click on the port, and select update driver> browse my computer for drivers> Select the driver folder you downloaded in step 1
 
 
+# Connecting pi to internet
+1. Plug pi into your laptop via usb-c
+
+2. ssh into the pi
+`ssh mars@hostname.local` where hostname is the label on the pi's ethernet port
+
+3. `sudo nmcli conn up eduroam`
 
 
 
