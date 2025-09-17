@@ -15,7 +15,7 @@ This repository is for the training bots
 6. Right click on the port, and select update driver> browse my computer for drivers> Select the driver folder you downloaded in step 1
 
 
-# Pulling code
+# Pulling code on to the pi
 1. Plug pi into your laptop via usb-c
 
 2. ssh into the pi
@@ -26,10 +26,11 @@ This repository is for the training bots
 4. Navigate to the directory you want to update and `git pull`
 
 
-# Building image
+# Building and running image
 1. Navigate to directory with the Dockerfile in it and make sure it's updated
 2. run `docker build -t image-name:tag .` where image-name:tag is the name of your docker image
     * if you need internet for building, follow setup for wired connection
+    * if you're building for the pi on a computer with amd64 hardware, you need to include `--platform linux/arm64`
 3. run `docker run -it --privileged image-name:tag` to start the container
     * This step should be done connected over wifi, not wired
 
