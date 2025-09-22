@@ -42,22 +42,13 @@ class SerialNode(Node):
         self.get_logger().info(f"Sending currents: {self.data}")
         self.serial_handler.send(MOTOR_CURRENT_MSG, self.data, self.get_logger())
         
-    # READING FEEDBACK COMMENTED OUT FOR NOW
-    # def readFromNucleo(self):
-    #     data = self.serial_handler.readMsg(logger=self.get_logger())
-    #     if data:
-    #         mf = Feedback(front_left = data[0],
-    #                             front_right = data[1],
-    #                             back_left = data[2],
-    #                             back_right = data[3],
-    #                             l_drum = data[4],
-    #                             r_drum = data[5],
-    #                             l_actuator = data[6],
-    #                             r_actuator = data[7],
-    #                             actuator_height = data[8])
-    #         self.feedback_publisher.publish(mf)
-    #     else:
-    #         self.get_logger().warn("no data")
+    def readFromNucleo(self):
+        data = self.serial_handler.readMsg(logger=self.get_logger())
+        if data:
+            mf = Feedback(ir_sensor = data[0])
+            self.feedback_publisher.publish(mf)
+        else:
+            self.get_logger().warn("no data")
 
 def main(args=None):
     rclpy.init(args=args)

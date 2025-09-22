@@ -1,2 +1,1 @@
-uint8 left_wheels
-uint8 right_wheels
+uint8 ir_sensor
