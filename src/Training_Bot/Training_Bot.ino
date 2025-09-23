@@ -3,8 +3,7 @@ Carlos Giron
 */
 
 /* NOTES:
-* For using tele-op, change func in main to "control_process()" 
-* Need to clean up this code by writing a header file for functions and testing and tele-op stuff
+Added start byte 
 */
 
 // ---------------------
@@ -13,21 +12,21 @@ Carlos Giron
 
 #include <stdint.h>
 
-#define FR_EN 		3
-#define FR_FORWARD  4
-#define FR_BACKWARD 5
+#define FR_EN 		  3
+#define FR_FORWARD  5
+#define FR_BACKWARD 4
 
-#define FL_EN		6
+#define BR_EN		    3
+#define BR_FORWARD	5
+#define BR_BACKWARD	4
+
+#define FL_EN		    6
 #define FL_FORWARD 	7
 #define FL_BACKWARD 8
 
-#define BL_EN		6
+#define BL_EN		    6
 #define BL_FORWARD  7
 #define BL_BACKWARD 8
-
-#define BR_EN		3
-#define BR_FORWARD	4
-#define BR_BACKWARD	5
 
 #define ZERO  126
 #define SPEED 255
@@ -51,9 +50,14 @@ class Wheel {
       pinMode(pinEn, OUTPUT);
   	  pinMode(pinF , OUTPUT);
       pinMode(pinB , OUTPUT);
+
+      digitalWrite(pinF, LOW);
+      digitalWrite(pinB, LOW);
+      analogWrite(pinEn, 0);
 	}
 
   void drive(uint8_t duty, bool isForward) {
+    delay(50);
     digitalWrite(pinF,  isForward);
     digitalWrite(pinB, !isForward);
     analogWrite(pinEn, duty);
@@ -85,17 +89,19 @@ Wheel frontRight(FR_EN, FR_FORWARD, FR_BACKWARD);
 Wheel backLeft(BL_EN, BL_FORWARD, BL_BACKWARD);
 Wheel backRight(BR_EN, BR_FORWARD, BR_BACKWARD);
 
-Wheel wheelAr[4] = {frontLeft, backLeft,frontRight, backRight};
+Wheel wheelAr[4] = {frontLeft, backLeft, frontRight, backRight};
 
 void control_process(void) {
   if (Serial.available() > 0) {
 
-    byte data[2]; // Left, Right 
-    Serial.readBytes(data, 2);
+    byte data[3]; // Left, Right 
+    Serial.readBytes(data, 3);
 
-    for (int i=0; i<2; i++) {
-      wheelAr[i*2].tele_drive(data[i]);
-      wheelAr[i*2+1].tele_drive(data[i]);
+    if (data[0] == 255) {
+      for (int i=0; i<2; i++) {
+        wheelAr[i*2].tele_drive(data[i+1]);
+        wheelAr[i*2+1].tele_drive(data[i+1]);
+      }
     }
   }
 }
@@ -103,8 +109,8 @@ void control_process(void) {
 bool forward = true;
 void test_process(void) {
   for (int i=0; i<2; i++) {
-    wheelAr[i].test_drive(150, forward);
-    wheelAr[i+1].test_drive(150, !forward);
+    wheelAr[i*2].drive(150, forward);
+    wheelAr[i*2+1].drive(150, !forward);
   }
   delay(2500);
   forward = !forward;
