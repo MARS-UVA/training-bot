@@ -47,7 +47,7 @@ class SerialNode(Node):
         data = self.serial_handler.readMsg(logger=self.get_logger())
         if data:
             mf = Feedback(us_sensor = data[0])
-            self.get_logger().warn(str(data[0]))
+            self.get_logger().warn(f"Ultrasonic data: {data[0]}")
             # self.feedback_publisher.publish(mf)
         else:
             self.get_logger().warn("no data")
