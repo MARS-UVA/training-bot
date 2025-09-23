@@ -29,7 +29,7 @@ class SerialNode(Node):
         #     qos_profile=1
         # )
         self.send_timer = self.create_timer(SEND_DELAY_SEC, self.sendCurrents)
-        # self.recv_timer = self.create_timer(RECV_DELAY_SEC, self.readFromNucleo)
+        self.recv_timer = self.create_timer(RECV_DELAY_SEC, self.readFromNucleo)
         self.serial_handler = SerialHandler()
 
     def listener_callback(self, msg):
