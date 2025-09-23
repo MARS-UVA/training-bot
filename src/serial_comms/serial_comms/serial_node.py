@@ -5,6 +5,7 @@ from rclpy.node import Node, QoSProfile
 from rclpy.qos import QoSHistoryPolicy, QoSReliabilityPolicy, Duration
 from serial_comms.serial_handler import SerialHandler
 from serial_msgs.msg import MotorCurrents
+from serial_msgs.msg import Feedback
 
 MOTOR_CURRENT_MSG = 0
 SEND_DELAY_SEC = 0.02
@@ -45,7 +46,7 @@ class SerialNode(Node):
     def readFromNucleo(self):
         data = self.serial_handler.readMsg(logger=self.get_logger())
         if data:
-            mf = Feedback(ir_sensor = data[0])
+            mf = Feedback(us_sensor = data[0])
             self.get_logger().warn(data[0])
             # self.feedback_publisher.publish(mf)
         else:
