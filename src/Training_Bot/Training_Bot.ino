@@ -1,9 +1,11 @@
 /* Authors:
 Carlos Giron
+Zachary Parsia
 */
 
 /* NOTES:
-Added start byte 
+* For using tele-op, change func in main to "control_process()" 
+* Need to clean up this code by writing a header file for functions and testing and tele-op stuff
 */
 
 // ---------------------
@@ -12,21 +14,24 @@ Added start byte
 
 #include <stdint.h>
 
-#define FR_EN 		  3
-#define FR_FORWARD  5
-#define FR_BACKWARD 4
+#define FR_EN 		3
+#define FR_FORWARD  4
+#define FR_BACKWARD 5
 
-#define BR_EN		    3
-#define BR_FORWARD	5
-#define BR_BACKWARD	4
-
-#define FL_EN		    6
+#define FL_EN		6
 #define FL_FORWARD 	7
 #define FL_BACKWARD 8
 
-#define BL_EN		    6
+#define BL_EN		6
 #define BL_FORWARD  7
 #define BL_BACKWARD 8
+
+#define BR_EN		3
+#define BR_FORWARD	4
+#define BR_BACKWARD	5
+
+#define US_TRIG 12
+#define US_ECHO 13
 
 #define ZERO  126
 #define SPEED 255
@@ -50,14 +55,9 @@ class Wheel {
       pinMode(pinEn, OUTPUT);
   	  pinMode(pinF , OUTPUT);
       pinMode(pinB , OUTPUT);
-
-      digitalWrite(pinF, LOW);
-      digitalWrite(pinB, LOW);
-      analogWrite(pinEn, 0);
 	}
 
   void drive(uint8_t duty, bool isForward) {
-    delay(50);
     digitalWrite(pinF,  isForward);
     digitalWrite(pinB, !isForward);
     analogWrite(pinEn, duty);
@@ -80,6 +80,54 @@ class Wheel {
 };
 
 
+class Ultrasonic {
+  private:
+    uint8_t pinTrig;
+    uint8_t pinEcho;
+  
+  public:
+    Ultrasonic(uint8_t pT, uint8_t pE) {
+      pinTrig = pT;
+      pinEcho = pE;
+
+      pinMode(pinTrig, OUTPUT);
+      pinMode(pinEcho, INPUT);
+    }
+
+    void send_distance() {
+      long duration;
+      float distance;
+
+      digitalWrite(pinTrig, LOW);
+      delayMicroseconds(2);
+      digitalWrite(pinTrig, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(pinTrig, LOW);
+
+      duration = pulseIn(US_ECHO, HIGH);
+      distance = (duration*.0343)/2;
+      uint8_t distanceByte;
+      
+      uint8_t header = 0xAA;
+
+      if (distance >= 255) {
+        distanceByte = (uint8_t) 255;
+      }
+      else  {
+        distanceByte = (uint8_t)distance;
+      }
+
+      Serial.write(&header, 1);
+      Serial.write(&distanceByte, 1);
+
+      //Serial.println(distance);
+      //Serial.println(distanceByte);
+
+      delay(100);
+    }
+};
+
+
 // ---------------------
 // setting up wheels and funcs for tele-op control or testing 
 // ---------------------
@@ -89,7 +137,9 @@ Wheel frontRight(FR_EN, FR_FORWARD, FR_BACKWARD);
 Wheel backLeft(BL_EN, BL_FORWARD, BL_BACKWARD);
 Wheel backRight(BR_EN, BR_FORWARD, BR_BACKWARD);
 
-Wheel wheelAr[4] = {frontLeft, backLeft, frontRight, backRight};
+Wheel wheelAr[4] = {frontLeft, backLeft,frontRight, backRight};
+
+Ultrasonic frontSense(US_TRIG, US_ECHO);
 
 void control_process(void) {
   if (Serial.available() > 0) {
@@ -104,6 +154,8 @@ void control_process(void) {
       }
     }
   }
+
+  frontSense.send_distance();
 }
 
 bool forward = true;
@@ -115,6 +167,7 @@ void test_process(void) {
   delay(2500);
   forward = !forward;
 }
+
 
 // ---------------------
 // Setup & Loop
