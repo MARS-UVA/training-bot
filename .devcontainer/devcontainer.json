@@ -33,6 +33,9 @@
               "python.analysis.extraPaths": [
                 "${workspaceFolder}/install/*/lib/python3.12/site-packages/**"
               ],
+              "python.autoComplete.extraPaths": [
+                "${workspaceFolder}/install/*/lib/python3.12/site-packages/**"
+              ],
               "C_Cpp.default.includePath": [
                 "${default}",
                 "/opt/ros/jazzy/include/**",
