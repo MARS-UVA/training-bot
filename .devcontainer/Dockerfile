@@ -4,14 +4,7 @@ ARG USERNAME=rosdev
 ARG UID=1000
 ARG GID=$UID
 
-# Install curl
-RUN apt install -y --no-install-recommends curl \
-    && apt clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Install ROS package signing keys
-RUN rm /usr/share/keyrings/ros-archive-keyring.gpg || true
-RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+# Remove outdated ROS package signing keys
 RUN rm /etc/apt/sources.list.d/ros2.list || true
 RUN rm /usr/share/keyrings/ros-archive-keyring.gpg || true
 
