@@ -1,4 +1,4 @@
-FROM ros:kilted-ros-base
+FROM ros:jazzy-ros-base
 
 ARG USERNAME=rosdev
 ARG UID=1000
@@ -17,8 +17,8 @@ RUN apt update -q \
     xauth \
     openssh-client \
     # ROS libraries for image handling
-    ros-kilted-cv-bridge \
-    ros-kilted-image-transport \
+    ros-jazzy-cv-bridge \
+    ros-jazzy-image-transport \
     wget \
     at \
     && apt clean \
