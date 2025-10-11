@@ -4,23 +4,34 @@ ARG USERNAME=rosdev
 ARG UID=1000
 ARG GID=$UID
 
-# Install some dependencies packages
-# OpenSSH is for connecting to Git
+# Install curl
+RUN apt install -y --no-install-recommends curl \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install ROS package signing keys
+RUN rm /usr/share/keyrings/ros-archive-keyring.gpg || true
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+RUN rm /etc/apt/sources.list.d/ros2.list || true
+RUN rm /usr/share/keyrings/ros-archive-keyring.gpg || true
+
+# Install dependencies
 RUN apt update -q \
     && apt upgrade -q -y \
     && apt install -y --no-install-recommends \
-    software-properties-common \
     libsdl2-dev \
     python3-pip \
     python3.12-venv \
     ninja-build \
     xauth \
     openssh-client \
-    # ROS libraries for image handling
-    ros-jazzy-cv-bridge \
-    ros-jazzy-image-transport \
     wget \
     at \
+    # Required developer tool
+    software-properties-common \
+    # Image handling
+    ros-jazzy-cv-bridge \
+    ros-jazzy-image-transport \
     && apt clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

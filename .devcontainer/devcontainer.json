@@ -1,5 +1,5 @@
 {
-  "name": "ROS 2 Kilted Workspace",
+  "name": "ROS 2 Jazzy Workspace",
   "remoteUser": "rosdev",
   "build": {
       "dockerfile": "Dockerfile",
@@ -35,7 +35,7 @@
               ],
               "C_Cpp.default.includePath": [
                 "${default}",
-                "/opt/ros/kilted/include/**",
+                "/opt/ros/jazzy/include/**",
                 "${workspaceFolder}/install/*/include/**",
                 "${workspaceFolder}/src/*/include/**"
               ]
