@@ -1,8 +1,11 @@
 # Follow an AprilTag tasks
 
-Now that you've learned the basics of ROS and AprilTags, it's time to start the onboarding project in full. I've provided two tasks to complete which will allow us to make significant progress on the project, and it would be great to start on them before we meet again this Friday.
+Now that you've learned the basics of ROS and AprilTags, it's time to start the onboarding project in full. I've
+provided two tasks to complete which will allow us to make significant progress on the project, and it would be great
+to start on them before we meet again this Friday.
 
-Since there are two tasks, let's divide up into one group of 2 and one group of 3. You can choose the groups (or, if you want me to, I can assign the groups). Please don't spend more than 1 hour on this unless you want to.
+Since there are two tasks, let's divide up into one group of 2 and one group of 3. You can choose the groups (or, if
+you want me to, I can assign the groups). Please don't spend more than 1 hour on this unless you want to.
 
 Also, for each task, please create a new branch off of this one (`apriltags`).
 
@@ -13,7 +16,9 @@ Before starting any of the tasks, please perform the following setup:
 ### In a VM/WSL
 
 1. This project uses ROS2 Jazzy Jalisco instead of Kilted Kaiju, so you'll need to
-[install](https://docs.ros.org/en/jazzy/Installation.html) that first (sorry, I didn't realize we were still using Jazzy on the training bot). You should also [uninstall Kilted Kaiju](https://roboticsbackend.com/how-to-uninstall-ros2-completely/).
+   [install](https://docs.ros.org/en/jazzy/Installation.html) that first (sorry, I didn't realize we were still using
+   Jazzy on the training bot). You should also
+   [uninstall Kilted Kaiju](https://roboticsbackend.com/how-to-uninstall-ros2-completely/).
 1. Source the ROS2 environment with `source /opt/ros/jazzy/setup.bash`.
 2. Update your local package repository by running `sudo apt update`.
 3. Then install necessary dependencies:
