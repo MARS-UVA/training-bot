@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+  <node pkg="motor_control" exec="motor_control" name="motor_control" namespace="bot" />
   <node pkg="teleop" exec="teleop" name="teleop" namespace="bot" />
   <node pkg="serial_comms" exec="serial" name="serial" namespace="bot" />
 </launch>

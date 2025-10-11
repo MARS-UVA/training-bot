@@ -5,7 +5,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include <SDL2/SDL.h>
-#include "serial_msgs/msg/motor_currents.hpp"
+#include "geometry_msgs/msg/twist.hpp"
 
 using namespace std::chrono_literals;
 
@@ -27,7 +27,7 @@ public:
       if (!controller_) RCLCPP_ERROR(this->get_logger(), "Failed to open controller: %s", SDL_GetError());
     }
 
-    publisher_ = this->create_publisher<serial_msgs::msg::MotorCurrents>("motor_currents", 10);
+    publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("motor_currents", 10);
     auto timer_callback =
       [this]() -> void {
         SDL_GameControllerUpdate();
@@ -36,32 +36,24 @@ public:
         float x_axis = SDL_GameControllerGetAxis(controller_, SDL_CONTROLLER_AXIS_LEFTX) / 32767.0f;
         float y_axis = -1 * SDL_GameControllerGetAxis(controller_, SDL_CONTROLLER_AXIS_LEFTY) / 32767.0f;
         RCLCPP_INFO(this->get_logger(), "x: %f, y: %f", x_axis, y_axis);
-        // Get linear and angular component of robot based on max speed
-        float linear_component = y_axis * FULL_FORWARD_MAGNITUDE;
-        float angular_component = x_axis * (1 - FULL_FORWARD_MAGNITUDE);
-        // Get wheel speeds based on linear and angular components (currently using arcade drive)
-        auto convertToCurrent = [](float speed) -> Uint8 {
-          float scaled_speed = ((speed + 1.0f) / 2.0f) * 254.0f;
-          if(scaled_speed < 0) scaled_speed = 0;
-          else if(scaled_speed > 254) scaled_speed = 254;
-          return static_cast<Uint8>(scaled_speed);
-        };
-        Uint8 left_wheels_speed = convertToCurrent(linear_component - angular_component);
-        Uint8 right_wheels_speed = convertToCurrent(linear_component + angular_component);
-        // Send wheel speeds to serial node
-        auto message = serial_msgs::msg::MotorCurrents();
-        message.left_wheels = left_wheels_speed;
-        message.right_wheels = right_wheels_speed;
-        this->publisher_->publish(message);
+
+        geometry_msgs::msg::Twist msg;
+        msg.linear.x = y_axis * FULL_FORWARD_MAGNITUDE;
+        msg.angular.z = -x_axis * (1 - FULL_FORWARD_MAGNITUDE);
+        this->publisher_->publish(msg);
       };
     timer_ = this->create_wall_timer(10ms, timer_callback);
+  }
+
+  ~Teleop() {
+    SDL_GameControllerClose(controller_);
   }
 
 private:
   float FULL_FORWARD_MAGNITUDE = 0.6;
   SDL_GameController* controller_ = nullptr;
   rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Publisher<serial_msgs::msg::MotorCurrents>::SharedPtr publisher_;
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
   size_t count_;
 };
 

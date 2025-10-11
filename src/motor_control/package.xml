@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>teleop</name>
+  <name>motor_control</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="xerix@todo.todo">xerix</maintainer>
+  <description>Provides a node which sends motor current commands based on a twist.</description>
+  <maintainer email="ivan.post24@gmail.com">rosdev</maintainer>
   <license>MIT</license>
 
   <depend>rclcpp</depend>
-  <depend>libsdl2-dev</depend>
   <depend>geometry_msgs</depend>
+  <depend>serial_msgs</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

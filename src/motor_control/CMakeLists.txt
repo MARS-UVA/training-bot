@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(teleop)
+project(motor_control)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,27 +7,24 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(geometry_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(serial_msgs REQUIRED)
 
-add_executable(teleop
-  src/teleop.cpp
+add_executable(motor_control
+  "src/node.cpp"
 )
 
-ament_target_dependencies(teleop
+ament_target_dependencies(motor_control
   rclcpp
   geometry_msgs
+  serial_msgs
 )
 
-target_link_libraries(teleop ${SDL2_LIBRARIES})
-target_include_directories(teleop PRIVATE ${SDL2_INCLUDE_DIRS})
-
 install(TARGETS
-  teleop
+  motor_control
   DESTINATION lib/${PROJECT_NAME}
 )
 
