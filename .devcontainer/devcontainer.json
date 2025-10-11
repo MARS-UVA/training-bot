@@ -32,6 +32,12 @@
               },
               "python.analysis.extraPaths": [
                 "${workspaceFolder}/install/*/lib/python3.12/site-packages/**"
+              ],
+              "C_Cpp.default.includePath": [
+                "${default}",
+                "/opt/ros/kilted/include/**",
+                "${workspaceFolder}/install/*/include/**",
+                "${workspaceFolder}/src/*/include/**"
               ]
           }
       }
