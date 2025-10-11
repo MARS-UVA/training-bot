@@ -4,3 +4,5 @@ log/
 *.tar
 .vscode/
 *.db
+
+.DS_Store
