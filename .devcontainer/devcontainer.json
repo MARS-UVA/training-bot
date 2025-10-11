@@ -31,9 +31,11 @@
                   "*.xacro": "xml"
               },
               "python.analysis.extraPaths": [
+                "/opt/ros/jazzy/lib/python3.12/site-packages/**",
                 "${workspaceFolder}/install/*/lib/python3.12/site-packages/**"
               ],
               "python.autoComplete.extraPaths": [
+                "/opt/ros/jazzy/lib/python3.12/site-packages/**",
                 "${workspaceFolder}/install/*/lib/python3.12/site-packages/**"
               ],
               "C_Cpp.default.includePath": [
