@@ -6,3 +6,5 @@ log/
 *.db
 
 .DS_Store
+
+*.egg-info
