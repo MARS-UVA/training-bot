@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import rclpy
 from rclpy.node import Node, QoSProfile
 from rclpy.qos import QoSHistoryPolicy, QoSReliabilityPolicy, Duration
@@ -35,28 +36,32 @@ class SerialNode(Node):
         # self.get_logger().warn("Received motor query")
         # motors = ["FL", "FR", "BL", "BR"]
         self.data[0] = msg.left_wheels
-        self.data[1] = msg.right_wheels 
+        self.data[1] = msg.right_wheels
 
     def sendCurrents(self):
         #print(ok)
         self.get_logger().info(f"Sending currents: {self.data}")
         self.serial_handler.send(MOTOR_CURRENT_MSG, self.data, self.get_logger())
-        
+
     def readFromNucleo(self):
-        data = self.serial_handler.readMsg(logger=self.get_logger())
-        if data:
-            mf = Feedback(ir_sensor = data[0])
-            self.get_logger().warn(data[0])
-            # self.feedback_publisher.publish(mf)
-        else:
-            self.get_logger().warn("no data")
+        pass
+        # data = self.serial_handler.readMsg(logger=self.get_logger())
+        # if data:
+        #     mf = Feedback(ir_sensor = data[0])
+        #     self.get_logger().warn(data[0])
+        #     # self.feedback_publisher.publish(mf)
+        # else:
+        #     self.get_logger().warn("no data")
 
 def main(args=None):
     rclpy.init(args=args)
 
     node = SerialNode()
 
-    rclpy.spin(node)
+    if hasattr(node.serial_handler, 'SER'):
+        rclpy.spin(node)
+    else:
+        print('Failed to open serial port, exiting', file=sys.stderr)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically

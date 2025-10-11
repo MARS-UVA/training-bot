@@ -20,7 +20,7 @@ class SerialHandler:
 
 	def setBytes(self, b):
 		self.totalDataBytes = b
-		
+
 	def setPort(self, port, baud):
 		self.SER.close()
 		self.SER = serial.Serial(port, baud, timeout = None)
@@ -34,10 +34,12 @@ class SerialHandler:
 		# self.SER.write(header.to_bytes(self.bytesPerMotor, byteorder="big"))
 		# logger.warn(f"Wrate {data}")
 		self.SER.write(bytes([255]) + bytes(data)) # write the data to serial port
-		logger.info(f"Wrote {data} to microcontroller")
+		if logger is not None:
+			logger.info(f"Wrote {data} to microcontroller")
 
 	def readMsg(self, logger=None):
-		logger.info(f'Serial bytes in waiting: {self.SER.in_waiting}')
+		if logger is not None:
+			logger.info(f'Serial bytes in waiting: {self.SER.in_waiting}')
 		if(self.SER.in_waiting<2): return []
 		elif(self.SER.in_waiting>4): self.SER.read((self.SER.in_waiting//2)*2)
 		header = self.SER.read(1)
