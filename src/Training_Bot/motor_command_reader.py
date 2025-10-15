@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import UInt8MultiArray
-from serial_ros.serial_handler import SerialHandler  # Adjust if needed
+from serial_ros.serial_handler import SerialHandler 
 from teleop_msgs.msg import MotorChanges
 
 class MotorCommandNode(Node):
@@ -31,8 +31,6 @@ class MotorCommandNode(Node):
         self.motor_currents = self.twist_to_motor_currents(linear, angular)
 
         # Publish over ROS
-        out_msg = UInt8MultiArray()
-        out_msg.data = self.motor_currents
         self.publisher.publish(out_msg)
 
         self.get_logger().info(f'Published & sent motor currents: {self.motor_currents}')
