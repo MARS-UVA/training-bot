@@ -1,4 +1,4 @@
-This repository is for the training bots DOOOOOOOOOOOG
+This repository is for the training bots DOOOOOOOOOOOOOOG
 
 
 # Setup for wired connection on Windows (should work out of the box on macOS and linux)
