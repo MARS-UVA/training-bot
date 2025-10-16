@@ -15,7 +15,7 @@ find_package(serial_msgs REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(teleop
-  src/teleop.cpp
+  teleop/teleop.cpp
 )
 
 ament_target_dependencies(teleop

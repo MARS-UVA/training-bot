@@ -1,14 +1,12 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 package_name = 'teleop'
 
 setup(
-    name=teleop,
+    name=package_name,
     version='0.0.0',
-    packages=[package_name],
-    py_modules=[
-        'teleop.motor_command_reader'
-    ],
+    packages=find_packages(where='src'),  # or packages=[package_name] if your code is flat in src/teleop
+    package_dir={'': 'src'},               # assuming code is in src/teleop now
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Dylan Stone',

@@ -10,12 +10,13 @@ def generate_launch_description():
             executable='teleop',
             name='teleop'
         ),
-        Node(
-            package='teleop',
-            namespace='bot',
-            executable='auto',
-            name='auto'
-        ),
+        #Mikhail this does not exist bro
+        # Node(
+        #     package='teleop',
+        #     namespace='bot',
+        #     executable='auto',
+        #     name='auto'
+        # ),
         Node(
             package='serial_comms',
             executable='serial',
