@@ -21,5 +21,11 @@ def generate_launch_description():
             executable='serial',
             name='serial',
             namespace = 'bot'
+        ),
+        Node(
+            package='teleop',
+            executable='motor_command_reader',
+            name='motor_command_reader',
+            output='screen'
         )
     ])
