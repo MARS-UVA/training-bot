@@ -3,6 +3,7 @@ from rclpy.node import Node
 from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
+import math
 
 class TurnToAprilTagNode (Node):
     def __init__ (self):
@@ -14,7 +15,7 @@ class TurnToAprilTagNode (Node):
         self.width = 640
         self.height = 480
         
-
+        
     def image_callback(self, msg : Image):
         self.width = msg.width
         self.height = msg.height
@@ -39,6 +40,23 @@ class TurnToAprilTagNode (Node):
                 else:
                     print(f"(center) {offset_x}")   
                     twist.angular.z = 0.0  
+                    #-----------------------------------------------
+                    # New part for also driving forward/backward
+                    #-----------------------------------------------
+                    image_size = math.dist(tag.corners[0], tag.corners[2])
+                    ideal_size = 150
+                    tolerance = 5
+                    if(image_size < ideal_size - tolerance):
+                        twist.linear.x = 0.1
+                        print(f"(forward) size: {image_size}")
+                    elif(image_size > ideal_size + tolerance):
+                        twist.linear.x = -0.1
+                        print(f"(backward) size: {image_size}")
+                    else:
+                        twist.linear.x = 0.0
+                        print("Staying stationary")
+                    #-----------------------------------------------
+
 
                 self.pub.publish(twist)
                 return
