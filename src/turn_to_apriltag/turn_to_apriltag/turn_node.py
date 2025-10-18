@@ -3,6 +3,11 @@ from rclpy.node import Node
 from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
+import PID
+
+CONSTANT_p = 1
+CONSTANT_i = 1
+CONSTANT_d = 1
 
 class TurnToAprilTagNode (Node):
     def __init__ (self):
@@ -30,18 +35,23 @@ class TurnToAprilTagNode (Node):
                 center_sx = sw//2
                 ac = tag.center
                 offset_x = ac[0] - center_sx
-                if (offset_x < -5):
-                    print(f"(left) {offset_x}")
-                    twist.angular.z = 0.2
-                elif (offset_x > 5):
-                    print(f"(right) {offset_x}")
-                    twist.angular.z = -0.2
-                else:
-                    print(f"(center) {offset_x}")   
-                    twist.angular.z = 0.0  
+                time = msg.header.stamp.sec + msg.header.stamp.nanosec/1e9
+                controller = PID(CONSTANT_p, CONSTANT_i, CONSTANT_d, time, offset_x)
+                controller.set_goal(center_sx)
+                while True:
+                    controller_value = controller.get_value()
+                    if (offset_x < -5):
+                        print(f"(left) {offset_x}")
+                        twist.angular.z = controller_value
+                    elif (offset_x > 5):
+                        print(f"(right) {offset_x}")
+                        twist.angular.z = controller_value
+                    else:
+                        print(f"(center) {offset_x}")   
+                        twist.angular.z = 0.0  
 
-                self.pub.publish(twist)
-                return
+                    self.pub.publish(twist)
+                    return
 
 
 def main():
