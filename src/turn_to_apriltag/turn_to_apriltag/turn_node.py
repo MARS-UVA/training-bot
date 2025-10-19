@@ -23,6 +23,12 @@ class TurnToAprilTagNode (Node):
         self.declare_parameter('parameter_i', CONSTANT_I)
         self.declare_parameter('parameter_d', CONSTANT_D)
 
+
+        #allows for updates while in runtime
+        self.add_post_set_parameters_callback(self.__parameters_update_callback)
+
+
+        #ensures that updates will not interrupt current thread and interrupt the reset
         self.__pid_lock = threading.Lock()
 
         #subscribed to detection_callbacks
@@ -51,9 +57,26 @@ class TurnToAprilTagNode (Node):
             if tag.tag_id == 0:
                 input_time = msg.header.stamp.sec + msg.header.stamp.nanosec/1e9
                 self.set_twist_turn(tag, twist, input_time)
-                
+
+    #code to update parameters at runtime         
     def __parameters_update_callback(self, parameters: list[rclpy.Parameter]) -> None:
-        CHEESE = 0
+        
+        for param in parameters:
+            if param.name == 'parameter_p':
+                with self.__pid_lock:
+                    self.parameter_p
+                    self.controller.reset()
+            if param.name == 'parameter_i':
+                with self.__pid_lock:
+                    self.parameter_i
+                    self.controller.reset()
+            if param.name == 'parameter_d':
+                with self.__pid_lock:
+                    self.parameter_d
+                    self.controller.reset()
+        
+
+        
     def set_twist_turn(self, tag, twist:Twist, input_time):
         #stops all movement
         twist.linear.x = 0.0
