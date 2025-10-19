@@ -4,7 +4,7 @@ from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from turn_to_apriltag.PID import PID
 
-#PID controller tunable variables
+#PID controller tunable variable defaults
 CONSTANT_P = 1
 CONSTANT_I = 1
 CONSTANT_D = 1
@@ -17,6 +17,11 @@ class TurnToAprilTagNode (Node):
     def __init__ (self):
         super().__init__('turn_to_apriltag')
 
+        #Determine CONSTANT_P, CONSTANT_I, CONSTANT_D
+        self.declare_parameter('parameter_p', CONSTANT_P)
+        self.declare_parameter('parameter_i', CONSTANT_I)
+        self.declare_parameter('parameter_d', CONSTANT_D)
+
         #subscribed to detection_callbacks
         self.sub = self.create_subscription(AprilTagDetections, 'awareness/apriltags', self.detection_callback, 10)
         
@@ -24,7 +29,7 @@ class TurnToAprilTagNode (Node):
         self.pub = self.create_publisher(Twist, 'control/twist', 10)
 
         #intializes PID controller with the tunable variables
-        self.controller = PID(CONSTANT_P, CONSTANT_I, CONSTANT_D)
+        self.controller = PID(self.get_parameter('parameter_p').get_parameter_value().double_value, self.get_parameter('parameter_i').get_parameter_value().double_value, self.get_parameter('parameter_d').get_parameter_value().double_value)
 
     def detection_callback(self, msg: AprilTagDetections):
         #Robot motor controller which this will publish to (update)
