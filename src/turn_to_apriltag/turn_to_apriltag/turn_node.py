@@ -3,6 +3,7 @@ from rclpy.node import Node
 from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from turn_to_apriltag.PID import PID
+import threading
 
 #PID controller tunable variable defaults
 CONSTANT_P = 1
@@ -22,6 +23,8 @@ class TurnToAprilTagNode (Node):
         self.declare_parameter('parameter_i', CONSTANT_I)
         self.declare_parameter('parameter_d', CONSTANT_D)
 
+        self.__pid_lock = threading.Lock()
+
         #subscribed to detection_callbacks
         self.sub = self.create_subscription(AprilTagDetections, 'awareness/apriltags', self.detection_callback, 10)
         
@@ -29,7 +32,10 @@ class TurnToAprilTagNode (Node):
         self.pub = self.create_publisher(Twist, 'control/twist', 10)
 
         #intializes PID controller with the tunable variables
-        self.controller = PID(self.get_parameter('parameter_p').get_parameter_value().double_value, self.get_parameter('parameter_i').get_parameter_value().double_value, self.get_parameter('parameter_d').get_parameter_value().double_value)
+        self.parameter_p = self.get_parameter('parameter_p').get_parameter_value().double_value
+        self.parameter_i = self.get_parameter('parameter_i').get_parameter_value().double_value
+        self.parameter_d = self.get_parameter('parameter_d').get_parameter_value().double_value
+        self.controller = PID(self.parameter_p, self.parameter_i, self.parameter_d)
 
     def detection_callback(self, msg: AprilTagDetections):
         #Robot motor controller which this will publish to (update)
@@ -46,7 +52,8 @@ class TurnToAprilTagNode (Node):
                 input_time = msg.header.stamp.sec + msg.header.stamp.nanosec/1e9
                 self.set_twist_turn(tag, twist, input_time)
                 
-
+    def __parameters_update_callback(self, parameters: list[rclpy.Parameter]) -> None:
+        CHEESE = 0
     def set_twist_turn(self, tag, twist:Twist, input_time):
         #stops all movement
         twist.linear.x = 0.0
