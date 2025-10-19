@@ -58,6 +58,10 @@ class TurnToAprilTagNode (Node):
                 input_time = msg.header.stamp.sec + msg.header.stamp.nanosec/1e9
                 self.set_twist_turn(tag, twist, input_time)
 
+        #publish to twist
+        self.pub.publish(twist)
+        return
+
     #code to update parameters at runtime         
     def __parameters_update_callback(self, parameters: list[rclpy.Parameter]) -> None:
         
@@ -106,11 +110,6 @@ class TurnToAprilTagNode (Node):
         else:
             print(f"(center) {offset_x}")   
             twist.angular.z = 0.0  
-        
-
-        #publish to twist
-        self.pub.publish(twist)
-        return
         
     
 def main():
