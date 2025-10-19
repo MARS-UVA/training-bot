@@ -3,7 +3,7 @@ from rclpy.node import Node
 from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
-import PID
+from turn_to_apriltag.PID import PID
 
 CONSTANT_p = 1
 CONSTANT_i = 1
