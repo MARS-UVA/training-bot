@@ -45,7 +45,11 @@ class TurnToAprilTagNode (Node):
                     #-----------------------------------------------
                     
                     #Shoe lace code copied from stack overflow https://stackoverflow.com/questions/41077185/fastest-way-to-shoelace-formula
-                    x_y = np.array(corners)
+                    x_y = np.array()
+                    x_y.append(tag.corner1)
+                    x_y.append(tag.corner2)
+                    x_y.append(tag.corner3)
+                    x_y.append(tag.corner4)
                     x_y = x_y.reshape(-1,2)
 
                     x = x_y[:,0]
