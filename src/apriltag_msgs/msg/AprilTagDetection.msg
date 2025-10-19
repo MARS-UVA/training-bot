@@ -2,8 +2,6 @@
 #
 # Corner points are guaranteed to be provided in clockwise order.
 
-std_msgs/Header header  # Header containing information about the original image capture.
-
 uint16 tag_id  # ID of the detected AprilTag.
 string<=16 tag_family  # Family of the detected AprilTag.
 
