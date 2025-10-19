@@ -59,6 +59,7 @@ class TurnToAprilTagNode (Node):
             if tag.tag_id == 0:
                 input_time = msg.header.stamp.sec + msg.header.stamp.nanosec/1e9
                 self.set_twist_turn(tag, twist, input_time)
+                self.decide_linear_movement(tag, twist)
 
         #publish to twist
         self.pub.publish(twist)
