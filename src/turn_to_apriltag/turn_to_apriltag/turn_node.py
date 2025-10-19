@@ -61,8 +61,8 @@ class TurnToAprilTagNode (Node):
         #end of copied code
 
         #Adjust these paramters as needed for each camera
-        ideal_size = 5000
-        tolerance = 500
+        ideal_size = 0.25   
+        tolerance = 0.1
         if(size < ideal_size - tolerance):
             twist.linear.x = 0.1
             print(f"(forward) size: {size}")
