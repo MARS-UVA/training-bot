@@ -17,9 +17,8 @@ WORKDIR /ros2_ws
 COPY . .
 
 # Build
-RUN . /opt/ros/${ROS_DISTRO}/setup.sh
 RUN python3 py_install_dependencies.py
-RUN colcon build --symlink-install
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --symlink-install
 
 # Source setup
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
