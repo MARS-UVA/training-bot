@@ -79,7 +79,7 @@ class ApriltagDetector(Node):
             detection_msg.corner3 = normalized_corners[2].tolist()
             detection_msg.corner4 = normalized_corners[3].tolist()
 
-            if isinstance(detection_array_msg, list):
+            if isinstance(detection_array_msg.detections, list):
                 detection_array_msg.detections.append(detection_msg)
 
         # Publish the detections
