@@ -3,7 +3,7 @@ from rclpy.node import Node
 from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
-import math
+import numpy as np
 
 class TurnToAprilTagNode (Node):
     def __init__ (self):
@@ -43,15 +43,28 @@ class TurnToAprilTagNode (Node):
                     #-----------------------------------------------
                     # New part for also driving forward/backward
                     #-----------------------------------------------
-                    image_size = math.dist(tag.corners[0], tag.corners[2])
-                    ideal_size = 150
-                    tolerance = 5
-                    if(image_size < ideal_size - tolerance):
+                    
+                    #Shoe lace code copied from stack overflow https://stackoverflow.com/questions/41077185/fastest-way-to-shoelace-formula
+                    x_y = np.array(corners)
+                    x_y = x_y.reshape(-1,2)
+
+                    x = x_y[:,0]
+                    y = x_y[:,1]
+
+                    S1 = np.sum(x*np.roll(y,-1))
+                    S2 = np.sum(y*np.roll(x,-1))
+
+                    size = .5*np.absolute(S1 - S2)
+                    #end of copied code
+
+                    ideal_size = 50000
+                    tolerance = 1000
+                    if(size < ideal_size - tolerance):
                         twist.linear.x = 0.1
-                        print(f"(forward) size: {image_size}")
-                    elif(image_size > ideal_size + tolerance):
+                        print(f"(forward) size: {size}")
+                    elif(size > ideal_size + tolerance):
                         twist.linear.x = -0.1
-                        print(f"(backward) size: {image_size}")
+                        print(f"(backward) size: {size}")
                     else:
                         twist.linear.x = 0.0
                         print("Staying stationary")
