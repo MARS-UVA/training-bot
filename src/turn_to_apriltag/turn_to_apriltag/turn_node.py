@@ -110,6 +110,36 @@ class TurnToAprilTagNode (Node):
             twist.linear.x = 0.0
             print("Staying stationary")
         return
+    
+    def set_twist_turn(self, tag, twist:Twist, input_time):
+        #stops all movement
+        twist.linear.x = 0.0
+
+        #apriltag center
+        april_tag_center = tag.center
+        
+        #difference between center of tag and the center of the camera
+        offset_x = (april_tag_center[0])
+
+        #give the current time
+        time = input_time
+
+        #set goal to be 0 which is the center of the image
+        self.controller.set_goal(0)
+        
+        #calculates PID controller values
+        controller_value = self.controller.get_value(time, offset_x)
+
+        #calculates and decides the way to turn
+        if (offset_x < LOWER_X_ERROR):
+            print(f"(left) {offset_x}")
+            twist.angular.z = controller_value
+        elif (offset_x > UPPER_X_ERROR):
+            print(f"(right) {offset_x}")
+            twist.angular.z = controller_value
+        else:
+            print(f"(center) {offset_x}")   
+            twist.angular.z = 0.0  
             
                 
 
