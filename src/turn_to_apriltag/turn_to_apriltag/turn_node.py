@@ -4,47 +4,83 @@ from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
 import numpy as np
+from turn_to_apriltag.PID import PID
+import threading
+
+#PID controller tunable variable defaults
+CONSTANT_P = 1
+CONSTANT_I = 1
+CONSTANT_D = 1
+
+#Acceptable range of error from the center irrelevant of actual width
+UPPER_X_ERROR = 0.1
+LOWER_X_ERROR = -0.1
 
 class TurnToAprilTagNode (Node):
     def __init__ (self):
         super().__init__('turn_to_apriltag')
+
+        #Determine CONSTANT_P, CONSTANT_I, CONSTANT_D
+        self.declare_parameter('parameter_p', CONSTANT_P)
+        self.declare_parameter('parameter_i', CONSTANT_I)
+        self.declare_parameter('parameter_d', CONSTANT_D)
+
+
+        #allows for updates while in runtime
+        self.add_post_set_parameters_callback(self.__parameters_update_callback)
+
+
+        #ensures that updates will not interrupt current thread and interrupt the reset
+        self.__pid_lock = threading.Lock()
+
+        #subscribed to detection_callbacks
         self.sub = self.create_subscription(AprilTagDetections, 'awareness/apriltags', self.detection_callback, 10)
-        self.image_sub = self.create_subscription(Image, 'awareness/image_raw', self.image_callback, 10)
+        
+        #publish to twist
         self.pub = self.create_publisher(Twist, 'control/twist', 10)
 
-        self.width = 640
-        self.height = 480
-        
-        
-    def image_callback(self, msg : Image):
-        self.width = msg.width
-        self.height = msg.height
+        #intializes PID controller with the tunable variables
+        self.parameter_p = self.get_parameter('parameter_p').get_parameter_value().double_value
+        self.parameter_i = self.get_parameter('parameter_i').get_parameter_value().double_value
+        self.parameter_d = self.get_parameter('parameter_d').get_parameter_value().double_value
+        self.controller = PID(self.parameter_p, self.parameter_i, self.parameter_d)
 
-    def detection_callback(self, msg):
+    def detection_callback(self, msg: AprilTagDetections):
+        #Robot motor controller which this will publish to (update)
         twist = Twist()
+
+        #Leave if there is no detection
         if not msg.detections:
             return 
+        
+        #pulls all tags from msg
         for tag in msg.detections:
+            #selects only tag id 0
             if tag.tag_id == 0:
-                twist.linear.x = 0.0
-                sw = self.width
-                center_sx = sw//2
-                ac = tag.center
-                offset_x = ac[0] - center_sx
-                if (offset_x < -5):
-                    print(f"(left) {offset_x}")
-                    twist.angular.z = 0.2
-                elif (offset_x > 5):
-                    print(f"(right) {offset_x}")
-                    twist.angular.z = -0.2
-                else:
-                    print(f"(center) {offset_x}")   
-                    twist.angular.z = 0.0  
-                    self.decide_linear_movement(tag, twist)
-                    
-                self.pub.publish(twist)
-                return
+                input_time = msg.header.stamp.sec + msg.header.stamp.nanosec/1e9
+                self.set_twist_turn(tag, twist, input_time)
 
+        #publish to twist
+        self.pub.publish(twist)
+        return
+
+    #code to update parameters at runtime         
+    def __parameters_update_callback(self, parameters: list[rclpy.Parameter]) -> None:
+        
+        for param in parameters:
+            if param.name == 'parameter_p':
+                with self.__pid_lock:
+                    self.parameter_p
+                    self.controller.reset()
+            if param.name == 'parameter_i':
+                with self.__pid_lock:
+                    self.parameter_i
+                    self.controller.reset()
+            if param.name == 'parameter_d':
+                with self.__pid_lock:
+                    self.parameter_d
+                    self.controller.reset()
+        
 
     def decide_linear_movement(self, tag, twist):
         #Shoe lace code copied from stack overflow https://stackoverflow.com/questions/41077185/fastest-way-to-shoelace-formula
