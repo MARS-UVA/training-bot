@@ -24,8 +24,7 @@ class ApriltagDetector(Node):
         self.bridge = CvBridge()
         
         # Initialize the AprilTag detector from the new library
-        self.detector = AprilTagDetector(families='tagstandar41h12',
-                                         nthreads=1,
+        self.detector = AprilTagDetector(nthreads=1,
                                          quad_decimate=1.0,
                                          quad_sigma=0.0,
                                          refine_edges=True,
