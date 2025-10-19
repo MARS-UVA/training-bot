@@ -15,7 +15,7 @@ find_package(serial_msgs REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(teleop
-  teleop.cpp
+  src/teleop.cpp
 )
 
 ament_target_dependencies(teleop
@@ -30,6 +30,12 @@ install(TARGETS
   teleop
   DESTINATION lib/${PROJECT_NAME}
 )
+
+install(PROGRAMS
+  teleop/motor_command_reader.py
+  DESTINATION libexec/${PROJECT_NAME}
+)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

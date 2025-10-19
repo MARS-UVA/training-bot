@@ -1,18 +1,23 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/xmlschema"?>
 <package format="3">
   <name>teleop</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="xerix@todo.todo">xerix</maintainer>
-  <license>MIT</license>
+  <version>0.0.1</version>
+  <description>hybrid ros 2 package with c++ and python nodes</description>
 
+  <maintainer email="xerix@todo.todo">xerix</maintainer>
+  <license>mit</license>
+
+  <!-- build tools -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <!-- runtime dependencies -->
   <depend>rclcpp</depend>
-  <depend>libsdl2-dev</depend>
+  <exec_depend>rclpy</exec_depend>
   <depend>serial_msgs</depend>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
-
+  <!-- testing -->
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 

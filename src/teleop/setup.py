@@ -1,20 +1,21 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 package_name = 'teleop'
 
 setup(
     name=package_name,
-    version='0.0.0',
-    packages=find_packages(where='src'),  # or packages=[package_name] if your code is flat in src/teleop
-    package_dir={'': 'src'},               # assuming code is in src/teleop now
+    version='0.0.1',
+    packages=[package_name],  # this assumes you have a teleop/ folder with __init__.py inside
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Dylan Stone',
-    maintainer_email='vha3kn@virginia.edu',
-    description='Teleop package for training bot',
-    license='MIT',
+    maintainer='your_name',
+    maintainer_email='your_email@example.com',
+    description='ackage',
+    license='Apache License 2.0',
+    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            # This registers the Python node as a console executable
             'motor_command_reader = teleop.motor_command_reader:main',
         ],
     },
