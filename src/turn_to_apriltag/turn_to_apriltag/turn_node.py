@@ -57,8 +57,8 @@ class TurnToAprilTagNode (Node):
                     size = .5*np.absolute(S1 - S2)
                     #end of copied code
 
-                    ideal_size = 50000
-                    tolerance = 1000
+                    ideal_size = 5000
+                    tolerance = 500
                     if(size < ideal_size - tolerance):
                         twist.linear.x = 0.1
                         print(f"(forward) size: {size}")
