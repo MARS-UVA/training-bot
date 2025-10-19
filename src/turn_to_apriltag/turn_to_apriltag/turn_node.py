@@ -47,7 +47,7 @@ class TurnToAprilTagNode (Node):
 
 
     def decide_linear_movement(self, tag, twist):
-         #Shoe lace code copied from stack overflow https://stackoverflow.com/questions/41077185/fastest-way-to-shoelace-formula
+        #Shoe lace code copied from stack overflow https://stackoverflow.com/questions/41077185/fastest-way-to-shoelace-formula
         x_y = np.array([tag.corner1, tag.corner2, tag.corner3, tag.corner4])
         x_y = x_y.reshape(-1,2)
 
