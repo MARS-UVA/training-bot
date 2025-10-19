@@ -32,16 +32,16 @@ class PID:
         delta_error = self.error_value - self.previous_error
 
         # calculate proportional (just error times the p constant)
-        self.proportional = self.p * self.error_value
+        self.proportional = self.p_constant * self.error_value
 
         # calculate integral (error accumulated over time times the constant)
-        self.integral += self.error_value * delta_time * self.i
+        self.integral += self.error_value * delta_time * self.i_constant
 
         # calculate derivative (rate of change of the error)
         # for the rate of change, delta_time can't be 0 (divison by zero...)
         self.derivative = 0
         if delta_time > 0:
-            self.derivative = delta_error / delta_time * self.d
+            self.derivative = delta_error / delta_time * self.d_constant
 
         # update previous error and previous time values to the current values
         self.previous_time, self.previous_error = time, self.error_value
