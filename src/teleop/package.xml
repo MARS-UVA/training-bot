@@ -8,7 +8,6 @@
   <license>MIT</license>
 
   <depend>rclcpp</depend>
-  <depend>libsdl2-dev</depend>
   <depend>geometry_msgs</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

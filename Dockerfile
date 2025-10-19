@@ -5,6 +5,7 @@ ENV ROS_DISTRO=jazzy
 
 # Install colcon, rosdep, and known system deps
 RUN apt-get update && apt-get install -y \
+    python3-pip \
     python3-colcon-common-extensions \
     libsdl2-dev \
     python3-serial \
