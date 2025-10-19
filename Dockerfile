@@ -17,13 +17,13 @@ WORKDIR /ros2_ws
 COPY . .
 
 # Build
-RUN . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --symlink-install
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh
+RUN python3 py_install_dependencies.py
+RUN colcon build --symlink-install
 
 # Source setup
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
     echo "source /ros2_ws/install/setup.bash" >> ~/.bashrc
-
-RUN python3 py_install_dependencies.py
 
 ENTRYPOINT ["/bin/bash", "-c", "source /opt/ros/${ROS_DISTRO}/setup.bash && source /ros2_ws/install/setup.bash \
     && cd /ros2_ws/src/startup && ros2 launch bot-launch.xml"]
