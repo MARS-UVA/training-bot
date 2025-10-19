@@ -40,40 +40,41 @@ class TurnToAprilTagNode (Node):
                 else:
                     print(f"(center) {offset_x}")   
                     twist.angular.z = 0.0  
-                    #-----------------------------------------------
-                    # New part for also driving forward/backward
-                    #-----------------------------------------------
+                    self.decide_linear_movement(tag, twist)
                     
-                    #Shoe lace code copied from stack overflow https://stackoverflow.com/questions/41077185/fastest-way-to-shoelace-formula
-                    x_y = np.array([tag.corner1, tag.corner2, tag.corner3, tag.corner4])
-                    x_y = x_y.reshape(-1,2)
-
-                    x = x_y[:,0]
-                    y = x_y[:,1]
-
-                    S1 = np.sum(x*np.roll(y,-1))
-                    S2 = np.sum(y*np.roll(x,-1))
-
-                    size = .5*np.absolute(S1 - S2)
-                    #end of copied code
-
-                    ideal_size = 5000
-                    tolerance = 500
-                    if(size < ideal_size - tolerance):
-                        twist.linear.x = 0.1
-                        print(f"(forward) size: {size}")
-                    elif(size > ideal_size + tolerance):
-                        twist.linear.x = -0.1
-                        print(f"(backward) size: {size}")
-                    else:
-                        twist.linear.x = 0.0
-                        print("Staying stationary")
-                    #-----------------------------------------------
-
-
                 self.pub.publish(twist)
                 return
 
+
+    def decide_linear_movement(self, tag, twist):
+         #Shoe lace code copied from stack overflow https://stackoverflow.com/questions/41077185/fastest-way-to-shoelace-formula
+        x_y = np.array([tag.corner1, tag.corner2, tag.corner3, tag.corner4])
+        x_y = x_y.reshape(-1,2)
+
+        x = x_y[:,0]
+        y = x_y[:,1]
+
+        S1 = np.sum(x*np.roll(y,-1))
+        S2 = np.sum(y*np.roll(x,-1))
+
+        size = .5*np.absolute(S1 - S2)
+        #end of copied code
+
+        #Adjust these paramters as needed for each camera
+        ideal_size = 5000
+        tolerance = 500
+        if(size < ideal_size - tolerance):
+            twist.linear.x = 0.1
+            print(f"(forward) size: {size}")
+        elif(size > ideal_size + tolerance):
+            twist.linear.x = -0.1
+            print(f"(backward) size: {size}")
+        else:
+            twist.linear.x = 0.0
+            print("Staying stationary")
+        return
+            
+                
 
 def main():
     rclpy.init()
