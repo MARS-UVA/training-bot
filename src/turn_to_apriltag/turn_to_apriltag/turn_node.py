@@ -36,10 +36,10 @@ class TurnToAprilTagNode (Node):
                 ac = tag.center
                 offset_x = ac[0] - center_sx
                 time = msg.header.stamp.sec + msg.header.stamp.nanosec/1e9
-                controller = PID(CONSTANT_p, CONSTANT_i, CONSTANT_d, time, offset_x)
+                controller = PID(CONSTANT_p, CONSTANT_i, CONSTANT_d)
                 controller.set_goal(center_sx)
                 while True:
-                    controller_value = controller.get_value()
+                    controller_value = controller.get_value(time, offset_x)
                     if (offset_x < -5):
                         print(f"(left) {offset_x}")
                         twist.angular.z = controller_value
