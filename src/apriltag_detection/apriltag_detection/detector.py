@@ -32,38 +32,62 @@ class ApriltagDetector(Node):
                                          decode_sharpening=0.25,
                                          debug=False)
 
-    def image_callback(self, msg):
-        # Convert ROS Image message to OpenCV image
-        try:
-            cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-        except Exception as e:
-            self.get_logger().error(f"Failed to convert image: {e}")
-            return
+def image_callback(self, msg):
+    # Convert ROS Image message to OpenCV image
+    try:
+        cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+    except Exception as e:
+        self.get_logger().error(f"Failed to convert image: {e}")
+        return
 
-        # Convert to grayscale
-        gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-        
-        # Detect AprilTags
-        detections = self.detector.detect(gray)
-        
-        # Create a message to publish
-        detection_array_msg = AprilTagDetections()
-        
-        for detection in detections:
-            detection_array_msg.tag_family = detection.tag_family
-            detection_array_msg.tag_id = detection.tag_id
+    # Get image dimensions
+    image_height, image_width, _ = cv_image.shape
 
-            
-            center = detection.center.tolist()
-            corners = detection.corners.flatten().tolist()
-            # TODO: Process corners
-            detection_array_msg.center = center
-            detection_array_msg.corners = corners
-            detection_array_msg.detections.append(detection_array_msg)
+    # Convert to grayscale
+    gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+    
+    # Detect AprilTags
+    detections = self.detector.detect(gray)
+    
+    # Create a message to publish
+    detection_array_msg = AprilTagDetections()
+    detection_array_msg.header = msg.header
+    
+    for detection in detections:
+        # Create an instance of the AprilTagDetection message
+        detection_msg = AprilTagDetectionMsg()
 
-        if len(detection_array_msg.detections) > 0:
-            self.publisher_.publish(detection_array_msg)
-            self.get_logger().info(f"Published {len(detection_array_msg.detections)} AprilTag detections.")
+        # Populate the basic fields
+        detection_msg.tag_id = detection.tag_id
+        detection_msg.family = detection.tag_family
+
+        # Original center and corners from the detector
+        center = detection.center
+        corners = detection.corners
+
+        # 1. Shift coordinate system to the center of the tag
+        corners_centered = corners - center
+
+        # 2. Normalize coordinates
+        normalized_center = [(center[0] / image_width) - 0.5, (center[1] / image_width) - 0.5]
+        normalized_corners = corners_centered / image_width
+        
+        # Populate the center and corner fields of the message
+        detection_msg.center = normalized_center
+        
+        detection_msg.corner1 = normalized_corners[0].tolist()
+        detection_msg.corner2 = normalized_corners[1].tolist()
+        detection_msg.corner3 = normalized_corners[2].tolist()
+        detection_msg.corner4 = normalized_corners[3].tolist()
+
+        detection_array_msg.detections.append(detection_msg)
+
+    # Publish the detections
+    if len(detection_array_msg.detections) > 0:
+        self.publisher_.publish(detection_array_msg)
+        self.get_logger().info(f"Published {len(detection_array_msg.detections)} AprilTag detections.")    
+        
+        
 
 
 def main(args=None):
