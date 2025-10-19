@@ -58,7 +58,7 @@ class ApriltagDetector(Node):
 
             # Populate the basic fields
             detection_msg.tag_id = detection.tag_id
-            detection_msg.family = detection.tag_family
+            detection_msg.tag_family = detection.tag_family
 
             # Original center and corners from the detector
             center = detection.center
@@ -79,7 +79,8 @@ class ApriltagDetector(Node):
             detection_msg.corner3 = normalized_corners[2].tolist()
             detection_msg.corner4 = normalized_corners[3].tolist()
 
-            detection_array_msg.detections.append(detection_msg)
+            if isinstance(detection_array_msg, list):
+                detection_array_msg.detections.append(detection_msg)
 
         # Publish the detections
         if len(detection_array_msg.detections) > 0:
