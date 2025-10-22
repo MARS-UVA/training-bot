@@ -18,7 +18,7 @@ WORKDIR /ros2_ws
 # Copy workspace
 COPY . .
 
-RUN pip install extra/apriltag_pose_estimation --break-system-packages
+RUN pip install extra/apriltag_pose_estimation
 
 # Build
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
