@@ -11,7 +11,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools', 'apriltag_pose_estimation @ git+https://github.com/MARS-UVA/apriltag_pose_estimation.git'],
+    install_requires=['setuptools'],
     zip_safe=True,
     maintainer='yogeshwar',
     maintainer_email='yogeshchess77@gmail.com',

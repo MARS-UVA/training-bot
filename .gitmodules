@@ -1,0 +1,3 @@
+[submodule "extra/apriltag_pose_estimation"]
+	path = extra/apriltag_pose_estimation
+	url = ../../MARS-UVA/apriltag_pose_estimation.git

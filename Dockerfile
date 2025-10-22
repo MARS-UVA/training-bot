@@ -18,7 +18,11 @@ COPY . .
 
 # Build
 RUN python3 py_install_dependencies.py
-RUN . /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --symlink-install
+RUN pip install extra/apriltag_pose_estimation --break-system-packages
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
+    && rosdep update \
+    && rosdep install --from-paths src -y --ignore-src \
+    && colcon build --symlink-install
 
 # Source setup
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
