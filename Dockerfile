@@ -17,13 +17,13 @@ WORKDIR /ros2_ws
 COPY . .
 
 # Build
-RUN python3 py_install_dependencies.py
-RUN pip install extra/apriltag_pose_estimation --break-system-packages
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
     && apt-get update \
     && rosdep update \
     && rosdep install --from-paths src -y --ignore-src \
     && colcon build --symlink-install
+RUN python3 py_install_dependencies.py
+RUN pip install extra/apriltag_pose_estimation --break-system-packages
 
 # Source setup
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
