@@ -6,7 +6,8 @@ from apriltag_msgs.msg import AprilTagDetection as AprilTagDetectionMsg
 from apriltag_msgs.msg import AprilTagDetections
 from cv_bridge import CvBridge
 import cv2
-from apriltag_pose_estimation.core import AprilTagDetector, setting_search_paths
+from apriltag_pose_estimation.core import AprilTagDetector
+from apriltag_pose_estimation.core.bindings import setting_search_paths
 
 class ApriltagDetector(Node):
     def __init__(self):
