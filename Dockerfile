@@ -9,7 +9,10 @@ RUN apt-get update && apt-get install -y \
     python3-colcon-common-extensions \
     libsdl2-dev \
     python3-serial \
+    ros-jazzy-apriltag \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip install https://github.com/MARS-UVA/apriltag_pose_estimation.git --break-system-packages
 
 WORKDIR /ros2_ws
 
@@ -18,12 +21,7 @@ COPY . .
 
 # Build
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
-    && apt-get update \
-    && rosdep update \
-    && rosdep install --from-paths src -y --ignore-src \
     && colcon build --symlink-install
-RUN python3 py_install_dependencies.py
-RUN pip install extra/apriltag_pose_estimation --break-system-packages
 
 # Source setup
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
