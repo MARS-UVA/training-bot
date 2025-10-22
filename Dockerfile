@@ -12,12 +12,12 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-apriltag \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install git+https://github.com/MARS-UVA/apriltag_pose_estimation.git --break-system-packages
-
 WORKDIR /ros2_ws
 
 # Copy workspace
 COPY . .
+
+RUN pip install extra/apriltag_pose_estimation --break-system-packages
 
 # Build
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
