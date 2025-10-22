@@ -3,15 +3,12 @@
 class PID:
     """A class implementing a PID controller."""
 
-    def __init__(self, p_constant, i_constant, d_constant, current_time, error_value):
+    def __init__(self, p_constant, i_constant, d_constant):
         """Initialises PID controller object from P, I, D constants, a function
         that returns current time and the feedback function."""
         # p, i, and d constants
         self.p_constant, self.i_constant, self.d_constant = p_constant, i_constant, d_constant
 
-        # saves the functions that return the time and the feedback
-        self.current_time = current_time
-        self.error_value = error_value
 
     def reset(self):
         """Resets/creates variables for calculating the PID values."""
@@ -21,21 +18,24 @@ class PID:
         # reset previous time and error variables
         self.previous_time, self.previous_error = 0, 0
 
-    def get_value(self):
+    def get_value(self, current_time, error_value):
         """Calculates and returns the PID value."""
 
-        # get current time
-        time = self.current_time()
 
         # time and error differences to the previous get_value call
-        delta_time = time - self.previous_time
-        delta_error = self.error_value - self.previous_error
+        delta_time = 0
+        delta_error = 0
+        if (not(self.previous_error == 0)):
+            delta_time = current_time - self.previous_time
+        if (not(self.previous_time == 0)):
+            delta_error = error_value - self.previous_error
 
         # calculate proportional (just error times the p constant)
-        self.proportional = self.p_constant * self.error_value
+        self.proportional = self.p_constant * error_value
 
         # calculate integral (error accumulated over time times the constant)
-        self.integral += self.error_value * delta_time * self.i_constant
+        
+        self.integral += error_value * delta_time * self.i_constant
 
         # calculate derivative (rate of change of the error)
         # for the rate of change, delta_time can't be 0 (divison by zero...)
@@ -44,7 +44,7 @@ class PID:
             self.derivative = delta_error / delta_time * self.d_constant
 
         # update previous error and previous time values to the current values
-        self.previous_time, self.previous_error = time, self.error_value
+        self.previous_time, self.previous_error = current_time, error_value
 
         # add P, I and D
         pid = self.proportional + self.integral + self.derivative
