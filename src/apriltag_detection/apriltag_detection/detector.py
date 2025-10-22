@@ -1,3 +1,4 @@
+from pathlib import Path
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
@@ -5,7 +6,7 @@ from apriltag_msgs.msg import AprilTagDetection as AprilTagDetectionMsg
 from apriltag_msgs.msg import AprilTagDetections
 from cv_bridge import CvBridge
 import cv2
-from apriltag_pose_estimation.core import AprilTagDetector
+from apriltag_pose_estimation.core import AprilTagDetector, setting_search_paths
 
 class ApriltagDetector(Node):
     def __init__(self):
@@ -19,10 +20,10 @@ class ApriltagDetector(Node):
         # Subscriber for raw images
         self.subscription = self.create_subscription(
             Image, 'awareness/image_raw', self.image_callback, 10)
-        
+
         # Initialize CvBridge
         self.bridge = CvBridge()
-        
+
         # Initialize the AprilTag detector from the new library
         self.detector = AprilTagDetector(nthreads=1,
                                          quad_decimate=1.0,
@@ -44,14 +45,14 @@ class ApriltagDetector(Node):
 
         # Convert to grayscale
         gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-        
+
         # Detect AprilTags
         detections = self.detector.detect(gray)
-        
+
         # Create a message to publish
         detection_array_msg = AprilTagDetections()
         detection_array_msg.header = msg.header
-        
+
         for detection in detections:
             # Create an instance of the AprilTagDetection message
             detection_msg = AprilTagDetectionMsg()
@@ -70,10 +71,10 @@ class ApriltagDetector(Node):
             # 2. Normalize coordinates
             normalized_center = [(center[0] / image_width) - 0.5, (center[1] / image_width) - 0.5]
             normalized_corners = corners_centered / image_width
-            
+
             # Populate the center and corner fields of the message
             detection_msg.center = normalized_center
-            
+
             detection_msg.corner1 = normalized_corners[0].tolist()
             detection_msg.corner2 = normalized_corners[1].tolist()
             detection_msg.corner3 = normalized_corners[2].tolist()
@@ -85,17 +86,18 @@ class ApriltagDetector(Node):
         # Publish the detections
         if len(detection_array_msg.detections) > 0:
             self.publisher_.publish(detection_array_msg)
-            self.get_logger().info(f"Published {len(detection_array_msg.detections)} AprilTag detections.")    
-            
-        
+            self.get_logger().info(f"Published {len(detection_array_msg.detections)} AprilTag detections.")
+
+
 
 
 def main(args=None):
-    rclpy.init(args=args)
-    apriltag_detector = ApriltagDetector()
-    rclpy.spin(apriltag_detector)
-    apriltag_detector.destroy_node()
-    rclpy.shutdown()
+    with setting_search_paths(relative_to_cwd=[Path('~/.local/lib').expanduser()]):
+        rclpy.init(args=args)
+        apriltag_detector = ApriltagDetector()
+        rclpy.spin(apriltag_detector)
+        apriltag_detector.destroy_node()
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':
