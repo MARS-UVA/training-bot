@@ -7,6 +7,7 @@ ENV ROS_DISTRO=jazzy
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-venv \
+    python3-opencv \
     python3-colcon-common-extensions \
     libsdl2-dev \
     python3-serial \
