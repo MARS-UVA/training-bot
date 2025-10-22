@@ -7,6 +7,7 @@ ENV ROS_DISTRO=jazzy
 RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-colcon-common-extensions \
+    python3-numpy \
     libsdl2-dev \
     python3-serial \
     ros-jazzy-apriltag \
