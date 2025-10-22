@@ -20,6 +20,7 @@ COPY . .
 RUN python3 py_install_dependencies.py
 RUN pip install extra/apriltag_pose_estimation --break-system-packages
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
+    && apt-get update \
     && rosdep update \
     && rosdep install --from-paths src -y --ignore-src \
     && colcon build --symlink-install
