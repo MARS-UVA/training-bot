@@ -24,6 +24,7 @@ RUN apt-get update && rosdep update --rosdistro ${ROS_DISTRO} \
 RUN python3 -m venv --system-site-packages .venv --system-site-packages --symlinks
 ENV PATH="/ros2_ws/.venv/bin:$PATH"
 
+RUN .venv/bin/python3 -m pip install "numpy<2"
 RUN .venv/bin/python3 -m pip install extra/apriltag_pose_estimation
 
 # Build
