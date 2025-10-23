@@ -93,12 +93,11 @@ class ApriltagDetector(Node):
 
 
 def main(args=None):
-    with setting_search_paths(relative_to_cwd=[Path('~/.local/lib').expanduser()]):
-        rclpy.init(args=args)
-        apriltag_detector = ApriltagDetector()
-        rclpy.spin(apriltag_detector)
-        apriltag_detector.destroy_node()
-        rclpy.shutdown()
+    rclpy.init(args=args)
+    apriltag_detector = ApriltagDetector()
+    rclpy.spin(apriltag_detector)
+    apriltag_detector.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == '__main__':
