@@ -16,7 +16,7 @@ setup(
     entry_points={
         'console_scripts': [
             # This registers the Python node as a console executable
-            'motor_command_reader = teleop.motor_command_reader:main',
+            'motor_command_reader = scripts.motor_command_reader:main',
         ],
     },
 )

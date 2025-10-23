@@ -18,12 +18,16 @@ add_executable(teleop
   src/teleop.cpp
 )
 
-ament_target_dependencies(teleop
-  rclcpp
-  serial_msgs
+# ament_target_dependencies(teleop
+#   rclcpp
+#   serial_msgs
+# )
+
+target_link_libraries(teleop PUBLIC
+  ${SDL2_LIBRARIES}
+  rclcpp::rclcpp
 )
 
-target_link_libraries(teleop ${SDL2_LIBRARIES})
 target_include_directories(teleop PRIVATE ${SDL2_INCLUDE_DIRS})
 
 install(TARGETS
@@ -33,7 +37,7 @@ install(TARGETS
 
 install(PROGRAMS
   teleop/motor_command_reader.py
-  DESTINATION libexec/${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 
