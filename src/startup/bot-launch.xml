@@ -2,7 +2,7 @@
 <launch>
   <node pkg="webcam" exec="webcam_capture" name="webcam_capture" namespace="bot" />
   <node pkg="apriltag_detection" exec="detector" name="apriltag_detector" namespace="bot" />
+  <node pkg="turn_to_apriltag" exec="turn_node" name="turn_to_apriltag" namespace="bot" />
   <node pkg="motor_control" exec="motor_control" name="motor_control" namespace="bot" />
-  <node pkg="teleop" exec="teleop" name="teleop" namespace="bot" />
   <node pkg="serial_comms" exec="serial" name="serial" namespace="bot" />
 </launch>

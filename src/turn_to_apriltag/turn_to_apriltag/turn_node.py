@@ -8,9 +8,9 @@ from turn_to_apriltag.PID import PID
 import threading
 
 #PID controller tunable variable defaults
-CONSTANT_P = 1
-CONSTANT_I = 1
-CONSTANT_D = 1
+CONSTANT_P = 0.5
+CONSTANT_I = 0
+CONSTANT_D = 0
 
 #Acceptable range of error from the center irrelevant of actual width
 UPPER_X_ERROR = 0.1
