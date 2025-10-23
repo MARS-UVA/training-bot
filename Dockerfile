@@ -21,7 +21,7 @@ ENV PATH="/ros2_ws/.venv/bin:$PATH"
 
 COPY ./ ./
 
-RUN rosdep update --rosdistro ${ROS_DISTRO} \
+RUN apt-get update && rosdep update --rosdistro ${ROS_DISTRO} \
     && rosdep install --from-paths src -y --ignore-src
 
 RUN pip install extra/apriltag_pose_estimation
