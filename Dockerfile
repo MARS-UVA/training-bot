@@ -5,6 +5,7 @@ ENV ROS_DISTRO=jazzy
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip
+RUN rm -rf $(python3 -c "import sysconfig; print(sysconfig.get_paths()['purelib'])")/numpy*
 RUN pip install --force-reinstall --break-system-packages "numpy<2"
 
 # Install colcon, rosdep, and known system deps
