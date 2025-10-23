@@ -3,11 +3,6 @@ FROM ros:jazzy
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ROS_DISTRO=jazzy
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3-pip
-RUN rm -rf $(python3 -c "import sysconfig; print(sysconfig.get_paths()['purelib'])")/numpy*
-RUN pip install --force-reinstall --break-system-packages "numpy<2"
-
 # Install colcon, rosdep, and known system deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
@@ -26,7 +21,7 @@ COPY ./ ./
 RUN apt-get update && rosdep update --rosdistro ${ROS_DISTRO} \
     && rosdep install --from-paths src -y --ignore-src
 
-RUN python3 -m venv --system-site-packages .venv --system-site-packages --symlinks
+RUN python3 -m venv .venv --system-site-packages
 ENV PATH="/ros2_ws/.venv/bin:$PATH"
 
 RUN .venv/bin/python3 -m pip install extra/apriltag_pose_estimation
