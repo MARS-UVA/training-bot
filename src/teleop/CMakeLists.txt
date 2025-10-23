@@ -25,6 +25,7 @@ add_executable(teleop
 
 target_link_libraries(teleop PUBLIC
   ${SDL2_LIBRARIES}
+  ${serial_msgs_TARGETS}
   rclcpp::rclcpp
 )
 

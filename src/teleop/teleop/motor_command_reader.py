@@ -3,8 +3,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import UInt8MultiArray
-from serial_ros.serial_handler import SerialHandler 
-from teleop_msgs.msg import MotorChanges
+from serial_msgs import MotorChanges
 
 class MotorCommandNode(Node):
     def __init__(self):

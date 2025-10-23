@@ -5,8 +5,8 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include <SDL2/SDL.h>
-// #include "serial_msgs/msg/motor_currents.hpp"
-#include "serial_msgs/serial_msgs/msg/motor_currents.h"
+#include "serial_msgs/msg/motor_currents.hpp"
+// #include "serial_msgs/serial_msgs/msg/motor_currents.h"
 
 using namespace std::chrono_literals;
 
