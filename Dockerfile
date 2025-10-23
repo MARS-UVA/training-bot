@@ -16,13 +16,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /ros2_ws/
 
-RUN python3 -m venv --system-site-packages .venv
-ENV PATH="/ros2_ws/.venv/bin:$PATH"
-
 COPY ./ ./
 
 RUN apt-get update && rosdep update --rosdistro ${ROS_DISTRO} \
     && rosdep install --from-paths src -y --ignore-src
+
+RUN python3 -m venv --system-site-packages .venv
+ENV PATH="/ros2_ws/.venv/bin:$PATH"
 
 RUN pip install extra/apriltag_pose_estimation
 
