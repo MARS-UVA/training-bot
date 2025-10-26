@@ -19,7 +19,7 @@ class ApriltagDetector(Node):
         self.publisher_ = self.create_publisher(
             msg_type=AprilTagDetections,
             topic='awareness/apriltags',
-            qos_profile=QoSPresetProfiles.SENSOR_DATA
+            qos_profile=QoSPresetProfiles.SENSOR_DATA.value
         )
 
         # Subscriber for raw images
@@ -27,7 +27,7 @@ class ApriltagDetector(Node):
             msg_type=Image,
             topic='awareness/image_raw',
             callback=self.image_callback,
-            qos_profile=QoSPresetProfiles.SENSOR_DATA
+            qos_profile=QoSPresetProfiles.SENSOR_DATA.value
         )
 
         # Initialize CvBridge

@@ -16,7 +16,7 @@ class WebcamCaptureNode(Node):
         self.publisher = self.create_publisher(
             msg_type=Image,
             topic="awareness/image_raw",
-            qos_profile=QoSPresetProfiles.SENSOR_DATA
+            qos_profile=QoSPresetProfiles.SENSOR_DATA.value
         )
         cv_cam_index = self.get_parameter('cv_cam_index').get_parameter_value().integer_value
         self.capture = cv2.VideoCapture(cv_cam_index, cv2.CAP_V4L2)

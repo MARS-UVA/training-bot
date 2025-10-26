@@ -39,7 +39,7 @@ class TurnToAprilTagNode (Node):
             msg_type=AprilTagDetections,
             topic='awareness/apriltags',
             callback=self.detection_callback,
-            qos_profile=QoSPresetProfiles.SENSOR_DATA
+            qos_profile=QoSPresetProfiles.SENSOR_DATA.value
         )
 
         #publish to twist
