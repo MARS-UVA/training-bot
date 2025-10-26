@@ -27,7 +27,7 @@ public:
       if (!controller_) RCLCPP_ERROR(this->get_logger(), "Failed to open controller: %s", SDL_GetError());
     }
 
-    publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("motor_currents", 10);
+    publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("control/twist", 10);
     auto timer_callback =
       [this]() -> void {
         SDL_GameControllerUpdate();
