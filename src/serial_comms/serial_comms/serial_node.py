@@ -40,7 +40,7 @@ class SerialNode(Node):
 
     def sendCurrents(self):
         #print(ok)
-        self.get_logger().info(f"Sending currents: {self.data}")
+        # self.get_logger().info(f"Sending currents: {self.data}")
         self.serial_handler.send(MOTOR_CURRENT_MSG, self.data, self.get_logger())
 
     def readFromNucleo(self):

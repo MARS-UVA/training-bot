@@ -34,8 +34,8 @@ class SerialHandler:
 		# self.SER.write(header.to_bytes(self.bytesPerMotor, byteorder="big"))
 		# logger.warn(f"Wrate {data}")
 		self.SER.write(bytes([255]) + bytes(data)) # write the data to serial port
-		if logger is not None:
-			logger.info(f"Wrote {data} to microcontroller")
+		# if logger is not None:
+		# 	logger.info(f"Wrote {data} to microcontroller")
 
 	def readMsg(self, logger=None):
 		if logger is not None:
