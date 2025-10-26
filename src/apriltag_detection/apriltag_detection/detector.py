@@ -85,9 +85,8 @@ class ApriltagDetector(Node):
                 detection_array_msg.detections.append(detection_msg)
 
         # Publish the detections
-        if len(detection_array_msg.detections) > 0:
-            self.publisher_.publish(detection_array_msg)
-            self.get_logger().info(f"Published {len(detection_array_msg.detections)} AprilTag detections.")
+        self.publisher_.publish(detection_array_msg)
+        self.get_logger().info(f"Published {len(detection_array_msg.detections)} AprilTag detections.")
 
 
 
