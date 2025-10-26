@@ -16,7 +16,7 @@ class WebcamCaptureNode(Node):
         cv_cam_index = self.get_parameter('cv_cam_index').get_parameter_value().integer_value
         self.capture = cv2.VideoCapture(cv_cam_index, cv2.CAP_V4L2)
         self.cv_bridge = CvBridge()
-        self.timer = self.create_timer(1/15, self.publish_frame)
+        self.timer = self.create_timer(1/24, self.publish_frame)
         self.get_logger().info(f'Capturing from camera {cv_cam_index}')
 
         self.__capture_lock = threading.Lock()
