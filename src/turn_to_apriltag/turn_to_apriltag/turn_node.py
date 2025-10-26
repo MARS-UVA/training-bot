@@ -127,7 +127,7 @@ class TurnToAprilTagNode (Node):
         april_tag_center = tag.center
 
         #difference between center of tag and the center of the camera
-        offset_x = (april_tag_center[0])
+        offset_x = -april_tag_center[0]
 
         #give the current time
         time = input_time
