@@ -1,6 +1,7 @@
 from pathlib import Path
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSPresetProfiles
 from sensor_msgs.msg import Image
 from apriltag_msgs.msg import AprilTagDetection as AprilTagDetectionMsg
 from apriltag_msgs.msg import AprilTagDetections
@@ -16,11 +17,18 @@ class ApriltagDetector(Node):
 
         # Publisher for AprilTag detections
         self.publisher_ = self.create_publisher(
-            AprilTagDetections, 'awareness/apriltags', 10)
+            msg_type=AprilTagDetections,
+            topic='awareness/apriltags',
+            qos_profile=QoSPresetProfiles.SENSOR_DATA
+        )
 
         # Subscriber for raw images
         self.subscription = self.create_subscription(
-            Image, 'awareness/image_raw', self.image_callback, 10)
+            msg_type=Image,
+            topic='awareness/image_raw',
+            callback=self.image_callback,
+            qos_profile=QoSPresetProfiles.SENSOR_DATA
+        )
 
         # Initialize CvBridge
         self.bridge = CvBridge()

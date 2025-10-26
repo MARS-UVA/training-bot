@@ -1,5 +1,6 @@
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSPresetProfiles
 from apriltag_msgs.msg import AprilTagDetections
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
@@ -34,7 +35,12 @@ class TurnToAprilTagNode (Node):
         self.__pid_lock = threading.Lock()
 
         #subscribed to detection_callbacks
-        self.sub = self.create_subscription(AprilTagDetections, 'awareness/apriltags', self.detection_callback, 10)
+        self.sub = self.create_subscription(
+            msg_type=AprilTagDetections,
+            topic='awareness/apriltags',
+            callback=self.detection_callback,
+            qos_profile=QoSPresetProfiles.SENSOR_DATA
+        )
 
         #publish to twist
         self.pub = self.create_publisher(Twist, 'control/twist', 10)

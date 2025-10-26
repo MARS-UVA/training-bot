@@ -3,6 +3,7 @@ import rclpy
 import threading
 from cv_bridge import CvBridge
 from rclpy.node import Node
+from rclpy.qos import QoSPresetProfiles
 from sensor_msgs.msg import Image
 
 
@@ -12,7 +13,11 @@ class WebcamCaptureNode(Node):
 
         self.declare_parameter('cv_cam_index', 0)
         self.add_post_set_parameters_callback(self.__parameters_update_callback)
-        self.publisher = self.create_publisher(Image, "awareness/image_raw", 10)
+        self.publisher = self.create_publisher(
+            msg_type=Image,
+            topic="awareness/image_raw",
+            qos_profile=QoSPresetProfiles.SENSOR_DATA
+        )
         cv_cam_index = self.get_parameter('cv_cam_index').get_parameter_value().integer_value
         self.capture = cv2.VideoCapture(cv_cam_index, cv2.CAP_V4L2)
         self.cv_bridge = CvBridge()
@@ -25,7 +30,7 @@ class WebcamCaptureNode(Node):
         if self.__capture_lock.locked():
             return
         with self.__capture_lock:
-            ret, frame = self.capture.read()
+                ret, frame = self.capture.read()
         if ret:
             image_msg = self.cv_bridge.cv2_to_imgmsg(frame, encoding="bgr8")
             self.publisher.publish(image_msg)
