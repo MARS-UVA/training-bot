@@ -59,8 +59,8 @@ class TurnToAprilTagNode (Node):
         twist = Twist()
 
         #Leave if there is no detection
-        if not msg.detections:
-            return
+        # if not msg.detections:
+        #     return
 
         #pulls all tags from msg
         for tag in msg.detections:
