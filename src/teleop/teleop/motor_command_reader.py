@@ -2,7 +2,6 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
-from std_msgs.msg import UInt8MultiArray
 from serial_msgs import MotorChanges
 
 class MotorCommandNode(Node):

@@ -10,13 +10,18 @@ def generate_launch_description():
             executable='teleop',
             name='teleop'
         ),
-        #Mikhail this does not exist bro
-        # Node(
-        #     package='teleop',
-        #     namespace='bot',
-        #     executable='auto',
-        #     name='auto'
-        # ),
+        Node(
+            package='slam_toolbox',
+            executable='async_slam_toolbox_node',
+            name='slam',
+            namespace = 'bot'
+        ),
+        Node(
+            package='turtlebot3_gazebo',
+            executable='turtlebot3_drive',
+            name='turtlebot3_drive',
+            namespace = 'bot'
+        ),
         Node(
             package='serial_comms',
             executable='serial',
@@ -27,6 +32,7 @@ def generate_launch_description():
             package='teleop',
             executable='motor_command_reader.py',
             name='motor_command_reader',
-            output='screen'
+            output='screen',
+            namespace='bot'
         )
     ])
