@@ -2,7 +2,7 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
-from serial_msgs import MotorChanges
+from serial_msgs.msg import MotorCurrents
 
 class MotorCommandNode(Node):
     def __init__(self):
@@ -16,7 +16,7 @@ class MotorCommandNode(Node):
             10)
 
         # ROS Publisher: publishes motor values
-        self.publisher = self.create_publisher(MotorChanges, '/teleop', 10)
+        self.publisher = self.create_publisher(MotorCurrents, '/teleop', 10)
 
         # Initialize motor values to neutral
         self.motor_currents = [127] * 6  # [tl, bl, tr, br, drum, actuator]
