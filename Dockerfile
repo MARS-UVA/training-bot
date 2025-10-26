@@ -1,7 +1,7 @@
-FROM ros:jazzy
+FROM ros:kilted
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV ROS_DISTRO=jazzy
+ENV ROS_DISTRO=kilted
 
 # Install colcon, rosdep, and known system deps
 RUN apt-get update && apt-get install -y \
