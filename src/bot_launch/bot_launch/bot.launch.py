@@ -1,23 +1,12 @@
-from launch_ros.actions import Node
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import SetEnvironmentVariable, IncludeLaunchDescription
 from launch.substitutions import PathJoinSubstitution
+from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     return LaunchDescription([
-        # Node(
-        #     package='teleop',
-        #     namespace='bot',
-        #     executable='teleop',
-        #     name='teleop'
-        # ),
-        Node(
-            package='slam_toolbox',
-            executable='async_slam_toolbox_node',
-            name='slam',
-            namespace = 'bot'
-        ),
+        SetEnvironmentVariable(name='TURTLEBOT3_MODEL', value='waffle'),
         # Node(
         #     package='serial_comms',
         #     executable='serial',
@@ -46,6 +35,13 @@ def generate_launch_description():
                     FindPackageShare('slam_toolbox'),
                     'launch',
                     'online_async_launch.py'
+                ])
+        ),
+        IncludeLaunchDescription(
+                PathJoinSubstitution([
+                    FindPackageShare('nav2_bringup'),
+                    'launch',
+                    'bringup_launch.py'
                 ])
         )
     ])

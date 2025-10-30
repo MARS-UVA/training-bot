@@ -46,13 +46,9 @@ target_link_libraries(teleop
 
 install(TARGETS
   teleop
+  motor_command_reader
   DESTINATION lib/${PROJECT_NAME}
 )
-
-# install(PROGRAMS
-#   teleop/motor_command_reader.py
-#   DESTINATION lib/${PROJECT_NAME}
-# )
 
 
 if(BUILD_TESTING)
