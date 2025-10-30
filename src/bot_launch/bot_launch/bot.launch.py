@@ -1,18 +1,35 @@
 from launch import LaunchDescription
-from launch.actions import SetEnvironmentVariable, IncludeLaunchDescription
+from launch.actions import SetEnvironmentVariable, IncludeLaunchDescription, TimerAction
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from ament_index_python.packages import get_package_share_directory
+
+import os
+
+rviz_config_file = os.path.join(
+    get_package_share_directory('bot_launch'), 
+    'rviz2',
+    'nav2_default_view.rviz')
+
+rviz_node = Node(
+    package='rviz2',
+    executable='rviz2',
+    name='rviz2',
+    arguments=['-d', rviz_config_file],
+    output='screen'
+)
+
 
 def generate_launch_description():
     return LaunchDescription([
         SetEnvironmentVariable(name='TURTLEBOT3_MODEL', value='waffle'),
-        # Node(
-        #     package='serial_comms',
-        #     executable='serial',
-        #     name='serial',
-        #     namespace = 'bot'
-        # ),
+        Node(
+            package='serial_comms',
+            executable='serial',
+            name='serial',
+            namespace = 'bot'
+        ),
         Node(
             package='teleop',
             executable='motor_command_reader',
@@ -43,5 +60,9 @@ def generate_launch_description():
                     'launch',
                     'bringup_launch.py'
                 ])
+        ),
+        TimerAction(
+            period=10.0,      # Delay in seconds
+            actions=[rviz_node]
         )
     ])

@@ -25,6 +25,6 @@ endif()
 
 ament_package()
 
-install(DIRECTORY launch
+install(DIRECTORY bot_launch rviz2
   DESTINATION share/${PROJECT_NAME}/
 )
