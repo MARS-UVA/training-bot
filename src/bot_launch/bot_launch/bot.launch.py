@@ -26,7 +26,7 @@ def generate_launch_description():
         # ),
         Node(
             package='teleop',
-            executable='motor_command_reader.py',
+            executable='motor_command_reader',
             name='motor_command_reader',
             output='screen',
             namespace='bot'

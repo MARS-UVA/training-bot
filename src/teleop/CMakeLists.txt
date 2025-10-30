@@ -8,6 +8,8 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(serial_msgs REQUIRED)
 # uncomment the following section in order to fill in
@@ -18,28 +20,38 @@ add_executable(teleop
   src/teleop.cpp
 )
 
-# ament_target_dependencies(teleop
-#   rclcpp
-#   serial_msgs
-# )
+add_executable(motor_command_reader
+  src/motor_command_reader.cpp
+)
 
-target_link_libraries(teleop PUBLIC
+target_link_libraries(teleop
+  rclcpp::rclcpp
+  rclcpp_components::rclcpp_components
+  serial_msgs::rclcpp_serial_msgs
+)
+
+ament_target_dependencies(motor_command_reader
+  rclcpp
+  serial_msgs
+  geometry_msgs
+)
+
+target_include_directories(teleop PRIVATE ${SDL2_INCLUDE_DIRS})
+target_link_libraries(teleop
   ${SDL2_LIBRARIES}
   ${serial_msgs_TARGETS}
   rclcpp::rclcpp
 )
-
-target_include_directories(teleop PRIVATE ${SDL2_INCLUDE_DIRS})
 
 install(TARGETS
   teleop
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(PROGRAMS
-  teleop/motor_command_reader.py
-  DESTINATION lib/${PROJECT_NAME}
-)
+# install(PROGRAMS
+#   teleop/motor_command_reader.py
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 
 if(BUILD_TESTING)
