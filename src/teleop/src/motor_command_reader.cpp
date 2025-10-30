@@ -25,11 +25,16 @@ private:
     rclcpp::Publisher<serial_msgs::msg::MotorCurrents>::SharedPtr _publisher;
 
     void twist_callback(const geometry_msgs::msg::TwistStamped& twist) {
-        RCLCPP_INFO(this->get_logger(), "linear (x): %f, angular (z): %f", twist.linear.x, twist.angular.z);
+        RCLCPP_INFO(this->get_logger(), "linear (x): %f, angular (z): %f", twist.twist.linear.x, twist.twist.angular.z);
 
         serial_msgs::msg::MotorCurrents msg;
-        msg.left_wheels = speed_to_current(msg->twist.linear.x - twist.angular.z);
-        msg.right_wheels = speed_to_current(msg->twist.linear.x + twist.angular.z);
+
+        double linear = twist.twist.linear.x;
+        double angular = twist.twist.angular.z;
+
+
+        msg.left_wheels = speed_to_current(linear - angular);
+        msg.right_wheels = speed_to_current(linear + angular);
         _publisher->publish(msg);
         
     }

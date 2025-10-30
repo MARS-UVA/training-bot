@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 project(teleop)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -16,6 +16,7 @@ find_package(serial_msgs REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+
 add_executable(teleop
   src/teleop.cpp
 )
@@ -26,14 +27,14 @@ add_executable(motor_command_reader
 
 target_link_libraries(teleop
   rclcpp::rclcpp
-  rclcpp_components::rclcpp_components
-  serial_msgs::rclcpp_serial_msgs
+  ${SDL2_LIBRARIES}
+  ${serial_msgs_TARGETS}
 )
 
-ament_target_dependencies(motor_command_reader
-  rclcpp
-  serial_msgs
-  geometry_msgs
+target_link_libraries(motor_command_reader
+  rclcpp::rclcpp
+  ${geometry_msgs_TARGETS}
+  ${serial_msgs_TARGETS}
 )
 
 target_include_directories(teleop PRIVATE ${SDL2_INCLUDE_DIRS})
