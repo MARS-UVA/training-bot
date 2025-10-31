@@ -6,16 +6,17 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "serial_msgs/msg/motor_currents.hpp"
-#include "serial_msgs/msg/motor_currents.hpp"
 
 
 class MotorControlNode: public rclcpp::Node {
 public:
 
-    MotorControlNode() : rclcpp::Node("motor_control") {
+    MotorControlNode() : rclcpp::Node("motor_command_reader") {
         using std::placeholders::_1;
         _subscription = this->create_subscription<geometry_msgs::msg::TwistStamped>("/cmd_vel", 10, std::bind(&MotorControlNode::twist_callback, this, _1));
         _publisher = this->create_publisher<serial_msgs::msg::MotorCurrents>("motor_currents", 10);
+        RCLCPP_INFO(this->get_logger(), "made publisher");
+
 
     }
 
