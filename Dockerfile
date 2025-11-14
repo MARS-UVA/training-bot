@@ -31,4 +31,4 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
     echo "source /ros2_ws/install/setup.bash" >> ~/.bashrc
 
 ENTRYPOINT ["/bin/bash", "-c", "source /opt/ros/${ROS_DISTRO}/setup.bash && source /ros2_ws/install/setup.bash \
-    && cd /ros2_ws/src/bot_launch && ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py && ros2 launch bot_launch/bot.launch.py"]
+    && cd /ros2_ws/src/bot_launch && ros2 launch bot_launch/bot.launch.py"]

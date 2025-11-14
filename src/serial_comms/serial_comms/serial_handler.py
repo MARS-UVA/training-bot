@@ -10,7 +10,8 @@ START = 255 # start byte preceding every message
 class SerialHandler:
 	def __init__(self):
 		try:
-			self.SER = serial.Serial("/dev/ttyACM0", 115200, timeout = None)
+			self.SER = serial.Serial("/dev/ttyACM1", 250000, timeout = None)
+
 		except serial.SerialException as e:
 			print(f"Error: Could not open or close serial port: {e}")
 
@@ -58,3 +59,11 @@ if __name__ == "__main__":
 	while True:
 		handler.send(header,data)
 		sleep(0.1)
+
+# def send(v1, v2):
+# 	s.write(bytes([255, v1, v2]))
+# 	s.flush()
+# def wack(N):
+# 	for i in range(N):
+# 		send(127, 127)
+# 	send(150, 150)

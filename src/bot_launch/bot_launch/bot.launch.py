@@ -51,8 +51,11 @@ def generate_launch_description():
                 PathJoinSubstitution([
                     FindPackageShare('slam_toolbox'),
                     'launch',
-                    'online_async_launch.py'
-                ])
+                    'online_async_launch.py',
+                ]),
+                launch_arguments={
+                    'resolution': '0.0005',
+                }.items()
         ),
         IncludeLaunchDescription(
                 PathJoinSubstitution([
@@ -62,7 +65,7 @@ def generate_launch_description():
                 ])
         ),
         TimerAction(
-            period=10.0,      # Delay in seconds
+            period=5.0,      # Delay in seconds
             actions=[rviz_node]
         )
     ])

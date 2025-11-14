@@ -32,10 +32,11 @@ private:
 
         double linear = twist.twist.linear.x;
         double angular = twist.twist.angular.z;
+        // angular = ((3 / (8 * 3.14)) * 127 * angular + 127);
 
 
-        msg.left_wheels = speed_to_current(linear - angular);
-        msg.right_wheels = speed_to_current(linear + angular);
+        msg.left_wheels = speed_to_current(linear - angular / 2.5);
+        msg.right_wheels = speed_to_current(linear + angular / 2.5);
         _publisher->publish(msg);
         
     }
@@ -44,8 +45,8 @@ private:
         double scaled_speed = ((speed + 1.0) / 2.0) * 254.0;
         if (scaled_speed < 0) {
             scaled_speed = 0;
-        } else if (scaled_speed > 254) {
-            scaled_speed = 254;
+        } else if (scaled_speed > 253) {
+            scaled_speed = 253;
         }
         return static_cast<uint8_t>(scaled_speed);
     }
