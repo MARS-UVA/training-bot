@@ -17,19 +17,10 @@ find_package(serial_msgs REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 
-add_executable(teleop
-  src/teleop.cpp
-)
-
 add_executable(motor_command_reader
   src/motor_command_reader.cpp
 )
 
-target_link_libraries(teleop
-  rclcpp::rclcpp
-  ${SDL2_LIBRARIES}
-  ${serial_msgs_TARGETS}
-)
 
 target_link_libraries(motor_command_reader
   rclcpp::rclcpp
@@ -37,15 +28,7 @@ target_link_libraries(motor_command_reader
   ${serial_msgs_TARGETS}
 )
 
-target_include_directories(teleop PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(teleop
-  ${SDL2_LIBRARIES}
-  ${serial_msgs_TARGETS}
-  rclcpp::rclcpp
-)
-
 install(TARGETS
-  teleop
   motor_command_reader
   DESTINATION lib/${PROJECT_NAME}
 )

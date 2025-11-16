@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<launch>
-  <node pkg="teleop" exec="teleop" name="teleop" namespace="bot" />
-  <node pkg="teleop" exec="motor_commmand_reader" name="motor_command_reader" namespace="bot">
-  <node pkg="serial_comms" exec="serial" name="serial" namespace="bot" />
-</launch>
