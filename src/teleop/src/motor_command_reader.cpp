@@ -26,22 +26,39 @@ private:
     rclcpp::Publisher<serial_msgs::msg::MotorCurrents>::SharedPtr _publisher;
 
     void twist_callback(const geometry_msgs::msg::TwistStamped& twist) {
-        RCLCPP_INFO(this->get_logger(), "linear (x): %f, angular (z): %f", twist.twist.linear.x, twist.twist.angular.z);
+        RCLCPP_INFO(this->get_logger(), "linear (x): %f m/s, angular (z): %f rad/s", twist.twist.linear.x, twist.twist.angular.z);
 
         serial_msgs::msg::MotorCurrents msg;
 
-        double linear = twist.twist.linear.x;
-        double angular = twist.twist.angular.z;
+        double robotLinearSpeed = twist.twist.linear.x;
+        double robotAngularSpeed = twist.twist.angular.z;
         // angular = ((3 / (8 * 3.14)) * 127 * angular + 127);
+        const double wheelRadius = 0.05;
+        const double wheelDistance = 0.25;
+        const double gearRatio = 24;
+        const double motorRadius = wheelRadius / gearRatio;
+        const double PI = 3.141595;
+        const double MAX_WHEEL_ANGULAR_SPEED = 200.0 * 2.0 * PI / 60.0;
 
+        double leftLinearVel = v - (wheelDistance / 2.0) * robotAngularSpeed;        
+        double rightLinearVel = v + (wheelDistance / 2.0) * robotAngularSpeed;
+        RCLCPP_INFO(this->get_logger(), "left linear speed: %f m/s, right linear speed: %f m/s", leftLinearVel, rightLinearVel);
+        double leftAngularVel = leftLinearVel / wheelRadius;
+        double rightAngularVel = rightLinearVel / wheelRadius;
 
-        msg.left_wheels = speed_to_current(linear - angular / 2.5);
-        msg.right_wheels = speed_to_current(linear + angular / 2.5);
+        RCLCPP_INFO(this->get_logger(), "left angular speed: %f rad/s, right angular speed: %f m/s", leftLinearVel, rightLinearVel);
+        double leftAngularVelNorm = leftAngularVel / MAX_WHEEL_ANGULAR_SPEED;
+        double rightAngularVelNorm = rightAngularVel / MAX_WHEEL_ANGULAR_SPEED;
+
+        RCLCPP_INFO(this->get_logger(), "left normalized angular speed: %f rad/s, right normalized angular speed: %f m/s", leftAngularVelNorm, rightAngularVelNorm);
+        msg.left_wheels = speed_to_current(leftAngularVelNorm);
+        msg.right_wheels = speed_to_current(rightAngularVelNorm);
         _publisher->publish(msg);
         
     }
 
     uint8_t speed_to_current(double speed) {
+        // speed from -1 to 1 -> byte from 0 to 253
         double scaled_speed = ((speed + 1.0) / 2.0) * 254.0;
         if (scaled_speed < 0) {
             scaled_speed = 0;
