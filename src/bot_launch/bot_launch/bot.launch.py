@@ -4,14 +4,15 @@ from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
-
 import os
 
+#creats a file path that works on all operating systems
 rviz_config_file = os.path.join(
     get_package_share_directory('bot_launch'), 
     'rviz2',
     'nav2_default_view.rviz')
 
+#creates a node that launches rviz with our config file for later use
 rviz_node = Node(
     package='rviz2',
     executable='rviz2',
@@ -20,10 +21,9 @@ rviz_node = Node(
     output='screen'
 )
 
-
 def generate_launch_description():
     return LaunchDescription([
-        SetEnvironmentVariable(name='TURTLEBOT3_MODEL', value='waffle'),
+        SetEnvironmentVariable(name='TURTLEBOT3_MODEL', value='waffle'), #needed for the turtlebot in gazebo
         Node(
             package='serial_comms',
             executable='serial',
@@ -45,6 +45,16 @@ def generate_launch_description():
                     ]),
                     launch_arguments={
                         'use_sim_time': 'True'
+                    }.items()
+                ),
+        IncludeLaunchDescription(
+                    PathJoinSubstitution([
+                        FindPackageShare('zed_wrapper'),
+                        'launch',
+                        'zed_camera.launch.py'
+                    ]),
+                    launch_arguments={
+                        'camera_model': '<camera_model>'
                     }.items()
                 ),
         IncludeLaunchDescription(
