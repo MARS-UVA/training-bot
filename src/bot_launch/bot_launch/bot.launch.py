@@ -54,7 +54,7 @@ def generate_launch_description():
                         'zed_camera.launch.py'
                     ]),
                     launch_arguments={
-                        'camera_model': '<camera_model>'
+                        'camera_model': 'zed2i'
                     }.items()
                 ),
         IncludeLaunchDescription(
