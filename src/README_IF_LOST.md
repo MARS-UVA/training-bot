@@ -7,6 +7,24 @@ People who actually read the whole thing actually accomplish things.
 Last updated 11/16/2025 by Dylan Stone (vha3kn)
 
 
+
+Running list of commands needed to install or whatever else:
+```
+sudo apt update
+sudo apt install \
+ros-jazzy-zed-msgs \
+ros-jazzy-nmea-msgs \
+ros-jazzy-geographic-msgs \
+ros-jazzy-backward-ros \
+ros-jazzy-diagnostic-updater \
+ros-jazzy-robot-localization
+```
+
+```
+sudo apt install ros-jazzy-turtlebot3-gazebo
+sudo apt install ros-jazzy-turtlebot3-simulations
+```
+
 # Maintaing convention
 
 ### C++
