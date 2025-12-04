@@ -44,7 +44,10 @@ def generate_launch_description():
                         'turtlebot3_world.launch.py'
                     ]),
                     launch_arguments={
-                        'use_sim_time': 'True'
+                        'use_sim_time': 'true',
+                        'gui' : '0',
+                        'publish_motors' : 'false',
+                        'turtlebot3_model': 'waffle'
                     }.items()
                 ),
         IncludeLaunchDescription(
