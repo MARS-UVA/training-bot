@@ -40,8 +40,8 @@ private:
         const double PI = 3.141595;
         const double MAX_WHEEL_ANGULAR_SPEED = 200.0 * 2.0 * PI / 60.0;
 
-        double leftLinearVel = v - (wheelDistance / 2.0) * robotAngularSpeed;        
-        double rightLinearVel = v + (wheelDistance / 2.0) * robotAngularSpeed;
+        double leftLinearVel = robotLinearSpeed - (wheelDistance / 2.0) * robotAngularSpeed;        
+        double rightLinearVel = robotLinearSpeed + (wheelDistance / 2.0) * robotAngularSpeed;
         RCLCPP_INFO(this->get_logger(), "left linear speed: %f m/s, right linear speed: %f m/s", leftLinearVel, rightLinearVel);
         double leftAngularVel = leftLinearVel / wheelRadius;
         double rightAngularVel = rightLinearVel / wheelRadius;
