@@ -46,7 +46,7 @@ private:
         double leftAngularVel = leftLinearVel / wheelRadius;
         double rightAngularVel = rightLinearVel / wheelRadius;
 
-        RCLCPP_INFO(this->get_logger(), "left angular speed: %f rad/s, right angular speed: %f m/s", leftLinearVel, rightLinearVel);
+        RCLCPP_INFO(this->get_logger(), "left angular speed: %f rad/s, right angular speed: %f m/s", leftAngularVel, rightAngularVel);
         double leftAngularVelNorm = leftAngularVel / MAX_WHEEL_ANGULAR_SPEED;
         double rightAngularVelNorm = rightAngularVel / MAX_WHEEL_ANGULAR_SPEED;
 
