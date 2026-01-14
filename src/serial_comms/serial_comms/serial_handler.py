@@ -3,6 +3,17 @@
 import serial
 from time import sleep
 import struct
+import os
+import subprocess
+
+arduino_path = None
+for fname in os.listdir("/dev"):
+    if fname.startswith("ttyACM"):
+        arduino_path = os.path.join("/dev", fname)
+        break 
+
+subprocess.run(["sudo", "chmod", "666", arduino_path])
+
 
 # To run this script on Jetson independently, you can do
 # eg. python3 serial_handler.py 100 100 100 100
@@ -10,7 +21,7 @@ START = 255 # start byte preceding every message
 class SerialHandler:
 	def __init__(self):
 		try:
-			self.SER = serial.Serial("/dev/ttyACM1", 250000, timeout = None)
+			self.SER = serial.Serial(arduino_path, 250000, timeout = None)
 
 		except serial.SerialException as e:
 			print(f"Error: Could not open or close serial port: {e}")
