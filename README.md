@@ -35,3 +35,16 @@ This repository is for the training bots DOOOOOOOOOOOG
     * This step should be done connected over wifi, not wired
 
 connect via wifi for this step, not wired
+
+
+# Setup for zed (because zed is stupid and lame) 
+Run in training-bot/src
+```
+git clone https://github.com/stereolabs/zed-ros2-wrapper.git
+cd ..
+sudo apt update
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y # install dependencies
+colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release --parallel-workers $(nproc) # build the workspace
+echo source $(pwd)/install/local_setup.bash >> ~/.bashrc # automatically source the installation in every new bash (optional)
+```
