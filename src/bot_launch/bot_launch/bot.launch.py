@@ -57,26 +57,66 @@ def generate_launch_description():
                         'zed_camera.launch.py'
                     ]),
                     launch_arguments={
-                        'camera_model': 'zed2i'
+                        'camera_model' : 'zed2i',
+                        'publish_map_tf' : 'true',
+                        'res' : 'HD720',
+                        'depth_mode' : 'PERFORMANCE',
+                        'camera_fps' : '30',
+                        'colorize_depth' : 'false',
+                        'color_enhancing' : 'false',
+                        'odom_topic' : '',
+                        'pos_tracking_enabled' : 'true',
+                        'pos_tracking_mode' : 'GEN_1',
+                        'area_memory' : 'false',
+                        'sensors_image_sync' : 'true'
                     }.items()
                 ),
         IncludeLaunchDescription(
-                PathJoinSubstitution([
-                    FindPackageShare('slam_toolbox'),
-                    'launch',
-                    'online_async_launch.py',
-                ]),
-                launch_arguments={
-                    'resolution': '0.0005',
-                }.items()
-        ),
+                    PathJoinSubstitution([
+                        FindPackageShare('rtabmap_launch'),
+                        'launch',
+                        'rtabmap.launch.py'
+                    ]),
+                    launch_arguments={
+                        'rgbd': 'true',
+                        'camera_namespace': '/zed/zed_node',
+                        'frame_id': 'zed_camera_link',
+                        'visual_odometry': 'true',
+                        'rgb_topic': '/zed/zed_node/rgb/color/rect/image',
+                        'depth_topic': '/zed/zed_node/depth/depth_registered',
+                        'camera_info_topic': '/zed/zed_node/rgb/color/rect/camera_info',
+                        'approx_sync': 'false',
+                        'rgbd_sync': 'true',
+                        'approx_rgbd_sync': 'true',
+                        'rviz': 'true',
+                        'database_path': '/tmp/rtabmap.db',
+                        'rtabmap_args': '--delete_db_on_startup true '
+                                        '--RGBD/DepthAsIntensity true '
+                                        '--Vis/MaxFeatures 1000 '
+                                        '--Vis/FeatureType 6'
+                    }.items()
+                ),
+        # IncludeLaunchDescription(
+        #         PathJoinSubstitution([
+        #             FindPackageShare('slam_toolbox'),
+        #             'launch',
+        #             'online_async_launch.py',
+        #         ]),
+        #         launch_arguments={
+        #             'resolution': '0.0005',
+        #         }.items()
+        # ),
         IncludeLaunchDescription(
-                PathJoinSubstitution([
-                    FindPackageShare('nav2_bringup'),
-                    'launch',
-                    'bringup_launch.py'
-                ])
-        ),
+            PathJoinSubstitution([
+                FindPackageShare('nav2_bringup'),
+                'launch',
+                'bringup_launch.py'
+            ]),
+            launch_arguments={
+                'use_sim_time': 'true',
+                'slam': 'true'
+            }.items()
+        )
         TimerAction(
             period=5.0,      # Delay in seconds
             actions=[rviz_node]
