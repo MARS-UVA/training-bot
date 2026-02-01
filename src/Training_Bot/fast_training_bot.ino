@@ -176,5 +176,5 @@ void setup()
 
 void loop()
 {
-  control_process2();
+  control_process();
 }
