@@ -37,19 +37,19 @@ def generate_launch_description():
             output='screen',
             namespace='bot'
         ),
-        IncludeLaunchDescription(
-                    PathJoinSubstitution([
-                        FindPackageShare('turtlebot3_gazebo'),
-                        'launch',
-                        'turtlebot3_world.launch.py'
-                    ]),
-                    launch_arguments={
-                        'use_sim_time': 'true',
-                        'gui' : '0',
-                        'publish_motors' : 'false',
-                        'turtlebot3_model': 'waffle'
-                    }.items()
-                ),
+        # IncludeLaunchDescription(
+        #             PathJoinSubstitution([
+        #                 FindPackageShare('turtlebot3_gazebo'),
+        #                 'launch',
+        #                 'turtlebot3_world.launch.py'
+        #             ]),
+        #             launch_arguments={
+        #                 'use_sim_time': 'true',
+        #                 'gui' : '0',
+        #                 'publish_motors' : 'false',
+        #                 'turtlebot3_model': 'waffle'
+        #             }.items()
+        #         ),
         IncludeLaunchDescription(
                     PathJoinSubstitution([
                         FindPackageShare('zed_wrapper'),
@@ -58,20 +58,23 @@ def generate_launch_description():
                     ]),
                     launch_arguments={
                         'camera_model' : 'zed2i',
-                        'publish_map_tf' : 'true',
+                        'publish_map_tf' : 'false',
                         'res' : 'HD720',
                         'depth_mode' : 'PERFORMANCE',
                         'camera_fps' : '30',
                         'colorize_depth' : 'false',
                         'color_enhancing' : 'false',
-                        'odom_topic' : '',
+                        'odom_topic' : '/zed/odom',
                         'pos_tracking_enabled' : 'true',
                         'pos_tracking_mode' : 'GEN_1',
                         'area_memory' : 'false',
                         'sensors_image_sync' : 'true'
                     }.items()
                 ),
-        IncludeLaunchDescription(
+        TimerAction( 
+            period=10.0,  # Delay RTAB-Map by 5 seconds
+            actions=[
+                IncludeLaunchDescription(
                     PathJoinSubstitution([
                         FindPackageShare('rtabmap_launch'),
                         'launch',
@@ -86,8 +89,8 @@ def generate_launch_description():
                         'depth_topic': '/zed/zed_node/depth/depth_registered',
                         'camera_info_topic': '/zed/zed_node/rgb/color/rect/camera_info',
                         'approx_sync': 'false',
-                        'rgbd_sync': 'true',
-                        'approx_rgbd_sync': 'true',
+                        'rgbd_sync': 'false',
+                        'approx_rgbd_sync': 'false',
                         'rviz': 'true',
                         'database_path': '/tmp/rtabmap.db',
                         'rtabmap_args': '--delete_db_on_startup true '
@@ -95,7 +98,9 @@ def generate_launch_description():
                                         '--Vis/MaxFeatures 1000 '
                                         '--Vis/FeatureType 6'
                     }.items()
-                ),
+                )
+            ]
+        ),
         # IncludeLaunchDescription(
         #         PathJoinSubstitution([
         #             FindPackageShare('slam_toolbox'),
@@ -106,17 +111,13 @@ def generate_launch_description():
         #             'resolution': '0.0005',
         #         }.items()
         # ),
-        IncludeLaunchDescription(
-            PathJoinSubstitution([
-                FindPackageShare('nav2_bringup'),
-                'launch',
-                'bringup_launch.py'
-            ]),
-            launch_arguments={
-                'use_sim_time': 'true',
-                'slam': 'true'
-            }.items()
-        )
+        # IncludeLaunchDescription(
+        #     PathJoinSubstitution([
+        #         FindPackageShare('nav2_bringup'),
+        #         'launch',
+        #         'bringup_launch.py'
+        #     ]),
+        # ),
         TimerAction(
             period=5.0,      # Delay in seconds
             actions=[rviz_node]
