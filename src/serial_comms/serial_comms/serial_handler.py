@@ -10,7 +10,7 @@ START = 255 # start byte preceding every message
 class SerialHandler:
 	def __init__(self):
 		try:
-			self.SER = serial.Serial("/dev/ttyACM0", 115200, timeout = None)
+			self.SER = serial.Serial("/dev/ttyACM0", 250000, timeout = None)
 		except serial.SerialException as e:
 			print(f"Error: Could not open or close serial port: {e}")
 

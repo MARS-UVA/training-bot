@@ -46,8 +46,8 @@ public:
           else if(scaled_speed > 254) scaled_speed = 254;
           return static_cast<Uint8>(scaled_speed);
         };
-        Uint8 left_wheels_speed = convertToCurrent(linear_component - angular_component);
-        Uint8 right_wheels_speed = convertToCurrent(linear_component + angular_component);
+        Uint8 left_wheels_speed = convertToCurrent(linear_component + angular_component);
+        Uint8 right_wheels_speed = convertToCurrent(linear_component - angular_component);
         // Send wheel speeds to serial node
         auto message = serial_msgs::msg::MotorCurrents();
         message.left_wheels = left_wheels_speed;
