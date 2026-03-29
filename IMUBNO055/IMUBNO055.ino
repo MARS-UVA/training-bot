@@ -97,6 +97,24 @@ void setup(void)
   delay(500); 
 }
 
+
+struct __attribute__((packed)) IMUPacket {
+  uint8_t startByte;       // Index 0: 0xFF
+  uint8_t reserved;        // Index 1: 0x00
+  float accelX;            // Index 2-5
+  float accelY;            // Index 6-9
+  float accelZ;            // Index 10-13
+  float orientX;           // Index 14-17 (Roll)
+  float orientY;           // Index 18-21 (Pitch)
+  float orientZ;           // Index 22-25 (Yaw)
+  float gyroX;             // Index 26-29
+  float gyroY;             // Index 30-33
+  float gyroZ;             // Index 34-37
+  double gravityVector;    // Index 38-45 (Magnitude)
+};
+
+
+
 void loop(void) 
 {
   adafruit_bno055_offsets_t myCalibData;
@@ -108,20 +126,51 @@ void loop(void)
   bno.getEvent(&event);
   
   /* Display the floating point data */
-  Serial.print("X: ");
-  Serial.print(event.orientation.x, 4);
-  Serial.print("\tY: ");
-  Serial.print(event.orientation.y, 4);
-  Serial.print("\tZ: ");
-  Serial.print(event.orientation.z, 4);
-  Serial.println("");
-  delay(500); 
+  IMUPacket packet;
+  
+  // Initialize header
+  packet.startByte = 0xFF;
+  packet.reserved = 0x00;
+
+  // Fetch Data from BNO055
+  sensors_event_t orientData, accelData, gyroData;
+  bno.getEvent(&orientData, Adafruit_BNO055::VECTOR_EULER);
+  bno.getEvent(&accelData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  bno.getEvent(&gyroData, Adafruit_BNO055::VECTOR_GYROSCOPE);
+  
+  // Populate the Struct
+  packet.accelX = accelData.acceleration.x;
+  packet.accelY = accelData.acceleration.y;
+  packet.accelZ = accelData.acceleration.z;
+  
+  packet.orientX = orientData.orientation.x;
+  packet.orientY = orientData.orientation.y;
+  packet.orientZ = orientData.orientation.z;
+  
+  packet.gyroX = gyroData.gyro.x;
+  packet.gyroY = gyroData.gyro.y;
+  packet.gyroZ = gyroData.gyro.z;
+
+  // Calculate Gravity Vector Magnitude: sqrt(x^2 + y^2 + z^2)
+  imu::Vector<3> gravity = bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY);
+  packet.gravityVector = sqrt(sq(gravity.x()) + sq(gravity.y()) + sq(gravity.z()));
+
+  // Send the raw binary data
+  Serial.println(); 
+  Serial.println("[PACKET]"); 
+  Serial.write((uint8_t*)&packet, sizeof(packet));
+
+  delay(50); // Increased frequency; binary is much faster than text
+
+  
+  Serial.println(""); 
   Serial.println("[CALIBRATION STATUS]");
   displayCalStatus(); 
-  delay(500); 
+  delay(50); 
   Serial.println("[CALIBRATION DATA]");
   displaySensorOffsets(myCalibData); 
-  
+  Serial.println(); 
+
   
   delay(100);
 }
