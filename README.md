@@ -2,7 +2,7 @@ This repository is for the training bots
 
 
 # Setup for wired connection on Windows (should work out of the box on macOS and linux)
-1. Download rndis Drivers folder from [drive](https://drive.google.com/drive/folders/1iG192wNeSPvb9UlEwjJTGAYXjVNH1b7i?usp=drive_link)
+1. Download rndis Drivers folder from [drive](https://drive.google.com/drive/folders/1vp15AP7IleiJO3sMvx1e3Ac8UWMjBjDx?usp=drive_link)
 
 2. Plug in raspberry pi to laptop via usb-c port
 
